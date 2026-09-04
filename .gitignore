@@ -61,9 +61,15 @@ env/
 venv/
 ENV/
 
-# Cache
+# Cache - CRÍTICO: não enviar para GitHub
 .cache/
 *.cache
+.wrangler/cache/
+.wrangler/tmp/
+.impeccable/hook.cache.json
+.codex/
+.agents/skills/
+.claude/skills/
 
 # Subrepositórios (remover duplicação)
 # Não queremos o .git do I3AutomationSite
