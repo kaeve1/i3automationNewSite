@@ -1,0 +1,208 @@
+/* Tokens — i3Automations & Controls
+   ============================================================================
+   REVISAO DE 2026-08-25. Este arquivo foi reescrito na Fase 1 do doit.md. O
+   que mudou e por que esta em design.md §1 e memorianew.md §4.
+
+   COR: apenas DUAS cores sao medidas — #003566 e #FDC500, amostradas por
+   contagem de pixel em logo/logonova.png (1024x387): 44.534 px de navy e
+   23.370 px de dourado. Todo o resto e DERIVADO por conta, em HSL preservando
+   o matiz 209 do navy, e conferido por ferramentas/contraste.py. Nenhum valor
+   foi escolhido no olho. Mexeu em cor, roda o script de novo.
+
+   O DOURADO SAIU DO SITE (design.md §1.4 regra 1). Ele existe so DENTRO do
+   logo, facetado, como sempre foi. Nenhuma regua, barra, icone, numero, hover
+   ou foco usa #FDC500. A marca ecoa pelo MATIZ 209 compartilhado, nao por
+   repetir a cor. Por isso --dourado nao esta mais declarado aqui: um token
+   declarado e um convite a usar.
+
+   TEMA UNICO, CLARO (design.md §1.4 regra 6). O bloco @media
+   (prefers-color-scheme: dark) e o [data-tema] foram removidos inteiros.
+
+   TIPOGRAFIA: herdada INTEIRA e sem alteracao do Universo do CLP, a pedido do
+   usuario. Familia, escala, pesos, entrelinhas e tracking sao os valores em
+   producao la. Nada nesta secao se altera sem confirmacao explicita.
+   Regra que governa tudo: titulo grande = peso leve. Nada acima de 500.
+   ============================================================================ */
+
+/* ---------- Tipografia local, nunca CDN (design.md §2) ----------
+   Outfit e variavel: um arquivo cobre 300–500. O unicode-range faz o
+   navegador baixar so o latin — em site EN-US o latin-ext quase nunca desce. */
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url("../fonts/outfit-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url("../fonts/outfit-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+                 U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+                 U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  /* ================= COR DE MARCA — a unica medida ================= */
+  --navy:        #003566;   /* H209 S100 L20 · 12,34:1 sobre branco */
+
+  /* ================= A FAMILIA AZUL — derivada do navy, matiz 209 =====
+     Ela existe porque o dourado saiu e o site precisava de um accent. A
+     derivacao correta e em HSL preservando o matiz e FIXANDO a saturacao:
+     clarear #003566 misturando com branco produz azul acinzentado (#6686A3 e
+     familia), porque a mistura linear derruba a saturacao. Registro completo
+     em memorianew.md §4.2.
+
+     A coincidencia que valida a escolha: --azul e H209 S55 L55 a 3,47:1; o
+     --azul do UnidoCLP (#628AD1) e H218 S55 L60 a 3,46:1. Mesma saturacao,
+     mesmo contraste ate a segunda casa, nove graus de matiz de distancia.
+     Partindo do logo do proprio cliente chegamos no accent do site que ele
+     chamou de perfeito. */
+  --azul:        #4D8ECB;   /* ACCENT. 3,47:1 sobre branco — FORMA, nao texto */
+  --azul-txt:    #2C6396;   /* a forma de ESCREVER accent no claro. 6,30:1    */
+  --azul-luz:    #88B4DD;   /* o accent SOBRE bloco escuro. 4,56:1 sobre bloco */
+  --azul-bloco:  #0D4477;   /* fundo do bloco escuro. branco por cima = 9,95:1 */
+  --azul-chip:   #DCE9F5;   /* fundo do chip de seta. navy por cima = 10,00:1  */
+  --chip-tinta:  var(--navy);
+
+  /* Por que --azul-luz existe, e nao e capricho: --azul sobre --azul-bloco da
+     2,87:1 e REPROVA o piso de 3:1 do WCAG 1.4.11. Foi medido e falhou. Sobre
+     bloco escuro o accent troca de TOKEN, nao de cor (design.md §1.4 regra 3). */
+
+  /* ================= SUPERFICIES — quatro, uma so direcao =================
+     O ritmo vertical e branco → off-white → quente → bloco escuro → branco.
+     O que mudou nesta revisao e a PROFUNDIDADE do escuro: #001D3D e #000814
+     saem, --azul-bloco entra. O bloco escuro agora e AZUL, nao quase-preto —
+     era o salto de #D7E3F0 direto para navy que fazia o site ler como placa
+     de sinalizacao (memorianew.md §2).
+
+     --sup-q e novo. E a faixa media de luminosidade que nao existia: o site
+     saltava de quase-branco a quase-preto sem nada quente no meio. Escasso e
+     estrutural — uma ou duas secoes por pagina, nunca coladas. */
+  --sup-1: #FFFFFF;
+  --sup-2: #F2F5F8;         /* claro alternado, frio */
+  --sup-q: #F7F3EC;         /* o neutro QUENTE. 1,11 vs branco · texto 15,74:1 */
+  --sup-3: var(--azul-bloco);
+  /* Rodape: H209 S80 L16. Precisa ser mais fundo que o bloco para a subida do
+     rodape revelado ler, mas sem voltar ao quase-preto. Medido: 1,47:1 contra
+     --sup-3 (passo visivel, nao um tema novo) e 14,61:1 de branco por cima. */
+  --sup-3-fundo: #082A49;
+
+  /* ================= TINTA ================= */
+  --tinta:       #1A1A1A;   /* 17,40 sobre sup-1 · 15,91 sup-2 · 15,74 sup-q */
+  --tinta-2:     #40607F;   /*  6,57 sobre sup-1 ·  6,00 sup-2 ·  5,94 sup-q */
+  --tinta-suave: #5A5A5A;   /*  6,90 sobre sup-1 ·  6,24 sup-q               */
+  --tinta-titulo: var(--navy);
+  --sobre-3:     #FFFFFF;   /* 9,95:1 sobre sup-3 */
+  --sobre-3-2:   rgba(255, 255, 255, .78);  /* achatado sobre sup-3: 6,29:1 */
+  /* Escrever em accent sobre claro. Substitui o antigo --accent-txt, que
+     apontava para --dourado-txt #6B5000 e morreu junto com o dourado. */
+  --accent-txt:  var(--azul-txt);
+
+  /* ================= LINHAS =================
+     Duas familias, e a distincao importa: FILETE e divisoria decorativa e o
+     WCAG 1.4.11 a isenta; BORDA-UI delimita componente (botao, campo) e tem
+     de bater 3:1. Tratar as duas como uma so e o erro comum.
+
+     Regra 5 de clean (plano.md §1): separacao por ESPACO, nunca por linha.
+     Filete so onde carrega informacao — a aresta do rodape revelado. */
+  --filete:       rgba(0, 0, 0, .14);
+  --filete-forte: rgba(0, 0, 0, .24);
+  --borda-ui:     #6E8093;  /* 4,06 sup-1 · 3,71 sup-2 · 3,67 sup-q — passa 3:1 */
+  --filete-esc:   rgba(255, 255, 255, .18);
+  --borda-ui-esc: rgba(255, 255, 255, .45);
+  --foco:         var(--navy);   /* 12,34:1 sobre claro */
+  --foco-esc:     #FFFFFF;       /*  9,95:1 sobre o bloco */
+  /* Aresta do rodape revelado: rgba(255,255,255,.55) sobre --sup-3-fundo
+     achata em #909FAD = 5,39:1. E a unica linha do site que carrega
+     informacao — ela e o que torna a subida legivel (design.md §6.1). */
+  --aresta-rodape: rgba(255, 255, 255, .55);
+
+  /* ================= TRACO DA LENTE =================
+     Cor do desenho tecnico revelado sobre foto. Tema unico: sempre navy. */
+  --traco:       #003566;
+  --traco-papel: #F2F5F8;
+  --traco-grade: rgba(0, 53, 102, .10);
+
+  /* ================= VEUS SOBRE MIDIA =================
+     Numeros medidos quadro a quadro, nao estimados (memorianew.md §8.6).
+     O do heroi e 25%: espelhado com -vf hflip o painel escuro vai para a
+     esquerda e branco por cima da 6,63:1. Sem hflip seriam 1,34:1, e nenhum
+     veu razoavel salvaria — 62% chegariam a 4,80:1 e enlameariam o video. */
+  --veu-heroi:   .25;
+  --veu-momento: .62;
+
+  /* ================= TIPOGRAFIA — HERDADA, NAO MEXER ================= */
+  --font: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* escala 14 · 15 · 16 · 17 · 20 · 28 · 38 · 44 · 200, fluida */
+  --fs-display: clamp(2.75rem, 10.4vw, 12.5rem);  /* 44px → 200px */
+  --fs-h2:      clamp(1.75rem, 2.3vw, 2.75rem);   /* 28px →  44px */
+  --fs-h3:      clamp(1.5rem,  2vw,   2.375rem);  /* 24px →  38px */
+  --fs-lead:    clamp(1.25rem, 1.46vw, 1.75rem);  /* 20px →  28px */
+  --fs-body:    clamp(1rem,    1.04vw, 1.25rem);  /* 16px →  20px */
+  --fs-small:   1.0625rem;                        /* 17px */
+  --fs-ui:      1rem;                             /* 16px */
+  --fs-eyebrow: .9375rem;                         /* 15px */
+  --fs-legal:   .875rem;                          /* 14px */
+  /* Medido: a faixa tem 5 itens e o mais largo e "150,000+" — 6 digitos, uma
+     virgula e um mais, ~4,11em em Outfit 300. A coluna util e 230px, logo o
+     teto de tipo e 230/4,11 = 56px. Em 3,4vw (65px a 1920) os dois ultimos
+     numeros encostavam. Este e o unico valor de tipo que difere do UnidoCLP,
+     e difere porque la a faixa tinha 4 itens curtos. */
+  --fs-numero:  clamp(1.875rem, 2.9vw, 3.25rem);
+
+  /* ================= ESPACO — escala base 8px ================= */
+  --s-1: 4px;   --s-2: 8px;   --s-3: 16px;  --s-4: 24px;
+  --s-5: 32px;  --s-6: 48px;  --s-7: 64px;  --s-8: 96px;
+  --s-9: 128px; --s-10: 160px; --s-11: 200px;
+
+  /* ================= LAYOUT ================= */
+  --container:   1376px;
+  --pad-lateral: 48px;
+  --nav-altura:  96px;
+  /* Regra 8 de clean (plano.md §1): --sec-y e INTOCAVEL. 160px no desktop.
+     Comprimir respiro para caber mais conteudo e a definicao de nao-clean. */
+  --sec-y:       var(--s-10);
+  /* Vao entre o BLOCO de cabecalho de uma secao e o componente que vem abaixo.
+     Cada componente inventava o proprio (numeros 96, escada 64, planta 64,
+     diagrama 64) e o ritmo vertical da pagina saia irregular sem motivo. */
+  --gap-bloco:   var(--s-7);
+  --gap-card:    16px;
+
+  /* ================= MOVIMENTO — uma curva so ================= */
+  --curva: cubic-bezier(.16, 1, .3, 1);
+  --t-cor: .18s ease;
+
+  color-scheme: light;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --pad-lateral: 32px;
+    --nav-altura: 80px;
+    --sec-y: var(--s-8);
+    /* --gap-bloco DESCE JUNTO, e nao e capricho. Ele era fixo em 64 enquanto
+       --sec-y caia de 160 para 96 e depois para 64: no celular o vao entre
+       duas secoes INTEIRAS ficava igual ao vao entre um titulo e o componente
+       dele, e a hierarquia que o desktop tem (2,5x) desaparecia. O que separa
+       assunto tem de continuar maior que o que separa grupo. */
+    --gap-bloco: var(--s-6);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --pad-lateral: 20px;
+    --nav-altura: 64px;
+    --sec-y: var(--s-7);
+    --gap-bloco: var(--s-5);
+  }
+}

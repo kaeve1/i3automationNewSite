@@ -1,0 +1,20 @@
+{
+  "name": "i3 Automations & Controls",
+  "short_name": "i3Automations",
+  "start_url": ".",
+  "display": "browser",
+  "background_color": "#0D4477",
+  "theme_color": "#003566",
+  "icons": [
+    {
+      "src": "brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

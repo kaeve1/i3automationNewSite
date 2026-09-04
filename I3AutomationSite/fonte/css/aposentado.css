@@ -1,0 +1,957 @@
+/* ============================================================================
+   PECAS APOSENTADAS — o CSS que saiu das paginas e nao saiu do projeto
+   ============================================================================
+   `design.md` §8 manda guardar o que sai: *"Nada do que sai e apagado do
+   repositorio -- sai da pagina, fica no `fonte/js/`."* A regra estava sendo
+   cumprida para o JS (planta.js, clp.js, lente.js e marca.js seguem em
+   `fonte/js/` e NAO sao publicados) e nao para o CSS: as regras destas mesmas
+   pecas continuavam viajando dentro de `style.css` ate o navegador do
+   visitante.
+
+   Medido na vistoria de acabamento de 2026-08-27: **16.776 bytes, 18,3% do
+   `style.css` publicado** (~4,6 KB depois do gzip), em 150 regras que nao
+   casam com um unico elemento das dez paginas. CSS e render-blocking -- e o
+   arquivo que segura a primeira pintura --, entao 18% dele morto custa em
+   tudo.
+
+   ESTE ARQUIVO NAO E PUBLICADO. `build_ativos.py` publica uma lista nomeada, e
+   `aposentado.css` nao esta nela. As regras ficam aqui, versionadas e
+   legiveis, para o dia em que a peca voltar.
+
+   AS FAMILIAS, e onde cada uma viveu:
+
+     .planta ............ a planta isometrica da home      (design.md §8: SAI)
+     .clp ............... o CLP explodido de capabilities  (design.md §8: SAI)
+     .lente ............. a revelacao foto/traco dos setores
+     .setor / .setores .. a grade de setores, que saiu da home em 26/08
+     .prancha ........... a prancha de quatro folhas da home
+     .momento-b / -c .... os momentos que as tres unidades substituiram
+     .feixe ............. o pulso que ligava duas secoes
+     .faixa ............. a faixa full-bleed da home, que virou video
+     .figura ............ figura com legenda, sem consumidor
+     .cabecalho--marca .. o cabecalho com a marca extrudada (marca.js, SAI)
+
+   COMO CONFERIR ANTES DE MEXER: `node ferramentas/movel/seletores.mjs` lista
+   seletor de classe sem consumidor nas dez paginas, e
+   `node ferramentas/movel/impressao.mjs antes|depois` compara o render inteiro
+   das dez, em duas larguras, por hash. Foi assim que esta separacao foi
+   validada: 20 renders, zero diferenca.
+   ============================================================================ */
+
+/* ---------- 6c.3  Momento — variação C: a máquina abre ----------
+   O TERCEIRO MECANISMO, e ele existe porque repetir o filme transforma um
+   momento em padrão e um padrão em tique. Aqui não é a janela que cresce
+   (momento 1) nem o texto que anda (momento 2): são DUAS PORTAS que correm
+   para os lados e descobrem o que está atrás.
+
+   O gesto tem assunto: o clipe é um operador na tela de uma máquina, e a
+   máquina se abrindo é a leitura literal do que a empresa faz — dar acesso ao
+   processo. Um mecanismo que só serve de variação é decoração; este significa.
+
+   SÓ `transform`, nunca `width`. Largura causa layout a cada quadro; as
+   portas são dois retângulos deslizando na GPU.
+
+   50,5% de largura em cada uma, e não 50%: com 50% exatos um arredondamento
+   sub-pixel abre um fio de vídeo no meio antes da hora. Meio ponto percentual
+   de sobreposição custa nada e fecha a costura. */.momento-c {
+  position: relative;
+  /* 240vh: as portas correm em 42% do curso (≈101vh) e o resto é o vídeo
+     parado, aberto. Ver §6c.0. */
+  height: 240vh;
+  --fim-abre: .42;
+  background: var(--sup-3);
+}.momento-c__palco {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: clip;
+  display: grid;
+  place-items: end stretch;
+}.momento-c__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}/* Sem JS as portas nao entram: elas so fazem sentido enquanto ha `--p` para
+   move-las, e paradas fechadas cobririam o video inteiro. */.momento-c__porta { display: none; }:where(html.js) .momento-c__porta {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  background: var(--sup-3);
+  will-change: transform;
+}.momento-c__porta--e { left: 0;  transform: translate3d(calc(var(--abre, 0) * -101%), 0, 0); }.momento-c__porta--d { right: 0; transform: translate3d(calc(var(--abre, 0) *  101%), 0, 0); }/* O SCRIM DO MOMENTO C É O MAIS FORTE DOS TRÊS, e o assunto é a razão: uma
+   tela de IHM é interface CLARA — campo branco com números. Branco sobre ela,
+   sem scrim, dá 1,47:1. É o pior caso de todo o site.
+
+   Só o gradiente de baixo: as portas cobrem o topo até quase o fim do curso,
+   então um gradiente superior estaria escurecendo uma porta opaca.
+
+   E ELE PRECISOU SUBIR MAIS DO QUE PARECIA. A primeira versão morria em 46%
+   da altura, o que dava alfa efetivo de só .35 no TOPO da faixa de texto
+   (70% da altura) — a primeira linha da frase reprovava a ~3,3:1 enquanto a
+   última passava. Um scrim que salva o pé e perde a cabeça do parágrafo é
+   pior que nenhum, porque nada acusa.
+
+   Medido no pôster, branco por cima (percentil 90 da faixa do pé):
+
+     sem scrim ......  1,47:1
+     alfa .48 .......  4,23:1   ainda reprova
+     alfa .62 .......  6,18:1   passa
+     alfa .78 .......  9,78:1
+
+   Com .82 no pé, .62 em 30% e morrendo em 60%, a faixa inteira do texto
+   (5% a 30% da altura, contando de baixo) fica entre .62 e .79 — ou seja,
+   entre 6,18:1 e ~9,9:1. E os 40% de cima da imagem continuam limpos. */.momento-c__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 29, 61, .82) 0%,
+                                      rgba(0, 29, 61, .62) 30%,
+                                      rgba(0, 29, 61, 0) 60%);
+}.momento-c__texto {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--pad-lateral);
+  padding-bottom: var(--s-8);
+  /* O texto entra DEPOIS de as portas terem aberto um terço: antes disso ele
+     estaria escrito sobre a porta, e não sobre o vídeo. */
+  --t: clamp(0, calc((var(--abre, 0) - .55) * 3), 1);
+  transform: translateY(calc((1 - var(--t)) * 16px));
+}:where(html.js) .momento-c__texto { opacity: var(--t); }.momento-c__frase {
+  max-width: 22ch;
+  margin: 0;
+  font-size: var(--fs-h2);
+  font-weight: 300;
+  line-height: 1.1;
+  color: #fff;
+}.momento-c__legenda {
+  margin: var(--s-4) 0 0;
+  font-size: var(--fs-eyebrow);
+  color: rgba(255, 255, 255, .78);
+  max-width: 40ch;
+}@media (max-width: 767px) {
+  .momento-c { height: 175vh; }
+}/* ---------- 6c.4  Momento — variação B: parallax com traço ----------
+   SEM VÍDEO. É o que impede a home de virar três telas de vídeo seguidas, e é
+   o único momento que fala de CONTROLE, que é o que a empresa vende.
+
+   O assunto é a macro do módulo de relés: toda aresta dura com fios em curva,
+   então traça excepcionalmente bem. NOTA DE LEGENDA, e ela não é preciosismo:
+   o objeto é um módulo de 4 relés SRD-05VDC-SL-C, acessório de Arduino. A
+   legenda diz "relay module and field wiring" e NUNCA "PLC" — o cliente é
+   fornecedor federal e programa ControlLogix e S7; chamar isso de CLP é
+   afirmação falsa sobre a competência dele. */.momento-b {
+  position: relative;
+  height: 180vh;
+  background: var(--sup-3);
+}.momento-b__palco {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: clip;
+  display: grid;
+  place-items: end start;
+}/* A classe vai no <img> e nao no <picture> -- e `imagem()` que decide isso, e
+   e o certo: `object-fit` so tem efeito num elemento substituido. */.momento-b__foto {
+  position: absolute;
+  inset: -4% 0;
+  width: 100%;
+  height: 108%;
+  object-fit: cover;
+  /* -5% ao longo de TODO o trilho. Parallax lento é uma exigência e não um
+     gosto: rápido é o que provoca enjoo, e a diretriz de movimento pede
+     contenção aqui. Como não há fase de abertura nesta variação — a foto já
+     nasce em tela cheia —, a sustentação dela é o trilho inteiro. */
+  transform: translate3d(0, calc(var(--p, 0) * -5%), 0);
+  will-change: transform;
+}/* O PARALLAX. A foto é 8% mais alta que o palco e desliza esses 8% ao longo do
+   curso — só `transform`, nunca `top`. Lento de propósito: parallax rápido é
+   o que provoca enjoo, e o WCAG 2.3.3 e a diretriz de movimento pedem
+   contenção aqui. */.momento-b__veu {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 68, 119, var(--veu-momento));
+  pointer-events: none;
+}/* O TRAÇO SAIU EM 2026-08-26, a pedido. As regras dele ficam registradas aqui
+   em comentário porque o mecanismo continua válido e pode voltar noutra foto:
+   `stroke-dasharray: 100` com `pathLength="100"` em todo caminho, um par só
+   servindo para os 69 caminhos, e o offset atado a `--p` — o desenho RESPONDE
+   à rolagem em vez de TOCAR uma vez, então subir a página o desfaz.
+
+   Por que ele não servia AQUI: a refinaria já é toda aresta dura — tanque,
+   escada helicoidal, torre de tocha, tubulação. Traçar a aresta de uma foto
+   que é só aresta duplica o desenho em vez de revelá-lo. O traço nasceu para
+   a macro dos relés, que é superfície lisa com fio em curva, e é lá que ele
+   tem o que revelar. */.momento-b__texto {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--pad-lateral);
+  padding-bottom: var(--s-9);
+}.momento-b__frase {
+  max-width: 22ch;
+  margin: 0;
+  font-size: var(--fs-h2);
+  font-weight: 300;
+  line-height: 1.1;
+  color: #fff;
+}.momento-b__legenda {
+  margin: var(--s-4) 0 0;
+  font-size: var(--fs-eyebrow);
+  color: rgba(255, 255, 255, .78);
+  max-width: 40ch;
+}@media (max-width: 767px) {
+  .momento-b { height: 160vh; }
+}/* ---------- 6d. FIGURA — fotografia full-bleed com legenda ----------
+   Uma imagem, uma legenda, nada mais. Ela existe para o caso em que a
+   fotografia É o conteúdo da dobra e não a ilustração de um texto — e por
+   isso ela ocupa a largura inteira em vez de viver dentro de uma coluna.
+
+   `aspect-ratio` declarado E `width`/`height` no <img>: os dois reservam a
+   caixa antes de a imagem chegar, que é a diferença entre a página assentar
+   e a página pular (CLS).
+
+   A LEGENDA É DESCRITIVA DO ASSUNTO, NUNCA AFIRMAÇÃO DE AUTORIA. O acervo
+   mistura material autoral com banco de imagem, e o cliente é fornecedor
+   federal — uma legenda que afirma obra não verificável é risco real, não
+   preciosismo (design.md §7.1). */.figura { margin: 0; }.figura__foto,
+.figura__foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+}.figura__legenda {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding: var(--s-4) var(--pad-lateral) 0;
+  font-size: var(--fs-eyebrow);
+  color: var(--tinta-suave);
+}/* ============================================================
+   7. LENTE DE REVELAÇÃO — o componente novo desta entrega
+   Sob o ponteiro, a foto vira desenho técnico. Duas implementações:
+   · WebGL2 escrito à mão (js/lente.js) — borda dissolvida por ruído,
+     traço que se acende radialmente, refração sutil;
+   · esta, em CSS puro, que roda quando não há WebGL. Mesmo desenho, borda
+     lisa. Nenhuma biblioteca de terceiros nas duas (design.md §9).
+
+   Três camadas encaixadas, cada uma com UMA máscara — nada de
+   mask-composite, que ainda diverge entre navegadores:
+     .lente__revelo  máscara radial que segue o ponteiro
+       .lente__papel  máscara = silhueta da peça, preenchimento = papel
+         .lente__tinta  máscara = traço XDoG, preenchimento = tinta
+   ============================================================ */.lente {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+  --mx: 50%;
+  --my: 50%;
+  --r: 0px;          /* raio 0 = lente fechada; o JS abre no hover */
+}.lente__foto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}.lente__gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}.lente.is-gl .lente__gl { display: block; }.lente.is-gl .lente__foto, .lente.is-gl .lente__revelo { opacity: 0; }.lente__revelo {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my),
+                                      #000 0 52%, rgba(0, 0, 0, .55) 78%, transparent 100%);
+  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my),
+                              #000 0 52%, rgba(0, 0, 0, .55) 78%, transparent 100%);
+  transition: opacity .3s ease;
+}.lente__papel, .lente__tinta {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}.lente__papel { background: var(--traco-papel); }.lente__tinta { background: var(--traco); }/* O anel: prova que a lente é um instrumento, não um borrão. */.lente__anel {
+  position: absolute;
+  left: var(--mx);
+  top: var(--my);
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+  margin: calc(var(--r) * -1) 0 0 calc(var(--r) * -1);
+  border: 1px solid var(--azul-luz);
+  opacity: calc(var(--r) / 160px * .55);
+  pointer-events: none;
+}.lente__anel::before, .lente__anel::after {
+  content: "";
+  position: absolute;
+  background: var(--azul-luz);
+}.lente__anel::before { left: 50%; top: -8px; bottom: -8px; width: 1px; }.lente__anel::after { top: 50%; left: -8px; right: -8px; height: 1px; }@media (prefers-reduced-motion: reduce) {
+  /* A lente carrega significado — o desenho É o conteúdo. Então ela não
+     some: fica aberta e parada no centro, sem perseguir o ponteiro. */
+  .lente { --r: 46%; --mx: 50%; --my: 50%; }
+  .lente__anel { display: none; }
+}@media (hover: none) {
+  /* Sem ponteiro não há lente. No toque a peça alterna inteira, no clique. */
+  .lente__anel { display: none; }
+  .lente.is-aberta .lente__revelo {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .lente__revelo { opacity: 0; }
+  .lente.is-aberta .lente__revelo { opacity: 1; }
+}/* Variante retangular: cards de setor, cabeçalhos. Sem silhueta — a máscara
+   de papel é o próprio retângulo, então só duas camadas. */.lente--retangulo .lente__papel {
+  -webkit-mask-image: none;
+  mask-image: none;
+}.lente--retangulo .lente__foto { object-fit: cover; }/* ============================================================
+   12. SETORES
+   ============================================================ */.setores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--gap-card);
+  margin-top: var(--s-7);
+}/* ============================================================
+   13. FAIXA FULL-BLEED
+   ============================================================ */.faixa {
+  position: relative;
+  min-height: clamp(380px, 52vh, 560px);
+  display: flex;
+  align-items: flex-end;
+  padding-block: var(--s-7);
+  overflow: hidden;
+  color: #fff;
+  --tinta-titulo: #fff;
+  --tinta-2: rgba(255, 255, 255, .8);
+  --foco: var(--foco-esc);
+}.faixa__foto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}.faixa::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(0, 29, 61, .55) 0%, rgba(0, 29, 61, .88) 100%);
+}.faixa h2 { max-width: 18ch; }.faixa .eyebrow { color: rgba(255, 255, 255, .8); }/* --- PRANCHA: a fotografia de campo como prova, não como enfeite ----------
+   Quatro folhas numa fileira ALINHADA, penduradas na mesma linha de referência.
+
+   O DESLOCAMENTO ALTERNADO SAIU, a pedido — "esse estilo escada que sobe e
+   desce não combinou com o site". Ele nasceu como ritmo de folha montada à
+   mão, e essa é justamente a língua errada: nada mais no site é colagem. Tudo
+   aqui é desenho técnico, e desenho técnico ALINHA. Quatro vistas na mesma
+   linha de base leem como uma folha só — que é o que elas são.
+
+   O QUE SUBSTITUI A ESCADA COMO RITMO é a cadeia de cota no topo: uma linha de
+   referência atravessa a fileira inteira, com um tique sobre cada folha e o
+   número da vista logo abaixo dele. É a mesma gramática da régua que já fecha
+   o bloco embaixo — agora ela abre e fecha, e a fileira fica presa entre as
+   duas em vez de flutuar.
+
+   O DOURADO SAIU DAS MARCAS DE REGISTRO, e isso é a regra crítica nº5 sendo
+   respeitada pela primeira vez neste bloco: eram quatro marcas douradas na
+   mesma dobra, contra um teto de duas. Elas passaram a `--filete-forte` — que
+   é o que uma marca de registro é, estrutura de folha — e sobrou UM acento, na
+   ORIGEM da linha de referência. Não é economia forçada: em desenho técnico a
+   origem de uma cadeia de cota é mesmo marcada diferente dos tiques
+   intermediários. A contagem da dobra fecha em dois: o realce do rótulo da
+   seção e esta origem.
+
+   NÃO há estado de foco aqui. Existiu um — o item apontado ganhava cor e os
+   irmãos recuavam — e saiu a pedido: a fileira inteira reagir à passada do
+   ponteiro chamava mais atenção para o mecanismo do que para as fotografias. */.prancha {
+  /* Metade do que era (96 -> 48). O texto e as fotografias são UM grupo — as
+     fotos são a prova do que o texto afirma —, e grupo junto se aproxima. O
+     respiro grande fica onde separa assuntos: no topo da seção. */
+  margin-top: var(--s-6);
+  position: relative;
+}/* O chão de desenho: retícula fina, apagada nas bordas para não virar quadro.
+   É o mesmo recurso do herói, na densidade de uma prancha de detalhe. */.prancha::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--s-5)) calc(-1 * var(--s-4));
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--traco-grade) 1px, transparent 1px),
+    linear-gradient(90deg, var(--traco-grade) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(120% 80% at 50% 45%, #000 30%, transparent 82%);
+  mask-image: radial-gradient(120% 80% at 50% 45%, #000 30%, transparent 82%);
+}/* --- a linha de referência, em cima -------------------------------------
+   Ela se DESENHA da esquerda para a direita conforme a prancha entra, e só
+   depois as folhas começam a pousar (§21.1). É a ordem de um desenho: primeiro
+   a linha de construção, depois as vistas — nunca as duas ao mesmo tempo. */.prancha__datum {
+  position: relative;
+  height: 1px;
+  background: var(--filete-forte);
+  transform: scaleX(var(--datum, 1));
+  transform-origin: left center;
+}/* A ORIGEM DA COTA, e é o único dourado do componente.
+   Em desenho técnico a origem de uma cadeia de cota é marcada diferente dos
+   tiques intermediários — então o acento aqui não é escolha estética, é a
+   notação. E ele resolve a regra crítica nº5 de uma vez: a versão anterior
+   punha uma marca de registro dourada em CADA uma das quatro folhas, quatro
+   manchas numa dobra que admite duas. Agora são as marcas em filete (que é o
+   que elas são: estrutura de folha) e um acento só, na origem. */.prancha__datum::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -5px;
+  width: 2px;
+  height: 11px;
+  background: var(--azul);
+}/* ============================================================
+   13b. FOTOGRAFIA NA PÁGINA
+   Três peças, e cada uma resolve um problema diferente:
+     .prancha     — a prova do trabalho, item a item, com moldura e cota;
+     .secao--foto — fotografia POR BAIXO de um bloco escuro;
+     .dados__foto — a miniatura que ancora cada programa entregue.
+   Nenhuma delas usa card: o que emoldura é filete e cota, não caixa.
+   ============================================================ */.prancha__linha {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s-5);
+  align-items: start;
+}/* ALINHADAS. Nenhuma folha desce — era o `nth-child(even) { margin-top }` que
+   fazia a escada, e ele saiu inteiro. */.prancha__item { margin: 0; }/* `flex-start` e não `center`: o tique tem de NASCER na linha de referência,
+   como o tique de uma cadeia de cota nasce na linha de cota. Centrado num
+   trilho de 32 px ele ficava 11 px abaixo dela, boiando — e um tique que não
+   toca a linha que mede não mede nada. */.prancha__vista {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-2);
+  height: var(--s-5);
+}/* --- o tique de cota e o número da vista --------------------------------
+   O tique cai exatamente sobre a borda esquerda da folha, que é onde uma
+   cadeia de cota real marca a extremidade da medida. */.prancha__tique {
+  width: 1px;
+  height: 11px;
+  flex-shrink: 0;
+  background: var(--filete-forte);
+  transform: scaleY(var(--avanco, 1));
+  transform-origin: top;
+}.prancha__idx {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 1px;      /* alinha a maiúscula do número com o topo do tique */
+  letter-spacing: .14em;
+  color: var(--tinta-2);
+  font-variant-numeric: tabular-nums;
+}.prancha__moldura {
+  position: relative;
+  aspect-ratio: 1 / 1;          /* as fotos são 600x600: quadrado é o nativo */
+  overflow: hidden;
+  background: var(--sup-2);
+  border: 1px solid var(--filete);
+}/* O `<picture>` OCUPA A MOLDURA, e isto não é acabamento: sem tamanho
+   próprio ele quebra o hover de um jeito que parece impossível.
+
+   O `<img>` aqui é `position: absolute; inset: 0`, ou seja fora do fluxo --
+   então o `<picture>` que o envolve tinha ALTURA ZERO, e o img resolvia contra
+   `.prancha__moldura`, que é `position: relative`. Funcionava.
+
+   Aí o hover pôs um `transform` no `<picture>`. E **elemento transformado vira
+   bloco de contenção dos descendentes absolutos**: o img passou a resolver
+   contra uma caixa de 0x0 e A FOTOGRAFIA SUMIA ao passar o mouse.
+
+   Com `absolute; inset: 0` o picture preenche a moldura, o img continua
+   resolvendo contra a mesma geometria de antes, e o transform do hover escala
+   a caixa certa.
+
+   REGRA QUE FICA: antes de transformar um elemento, conferir se ele tem
+   descendente `position: absolute`. O transform muda o referencial deles, e o
+   sintoma -- conteúdo sumindo -- não se parece nada com a causa. */.prancha__moldura picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}.prancha__moldura img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}/* Marca de registro no canto — a mesma que uma prancha real usa para alinhar
+   folhas. Estrutura, não acento: por isso `--filete-forte` e não dourado. */.prancha__moldura::before,
+.prancha__moldura::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  background: var(--filete-forte);
+  z-index: 2;
+}.prancha__moldura::before { width: 22px; height: 2px; }.prancha__moldura::after  { width: 2px; height: 22px; }.prancha__legenda {
+  margin-top: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.45;
+  letter-spacing: .01em;
+  color: var(--tinta-2);
+}.prancha__ref {
+  display: block;
+  font-weight: 500;
+  color: var(--tinta-titulo);
+}/* --- a régua de cota, embaixo -------------------------------------------
+   Linha de dimensão com traços de extremidade, como em desenho técnico. Ela
+   nomeia o que a fileira mostra, então informa — não é ornamento. */.prancha__cota {
+  /* --s-6 e não --s-7: com a fileira alinhada, todas as legendas terminam na
+     mesma altura, então o respiro que existia para a folha mais baixa acabar
+     antes da cota deixou de ser necessário. */
+  margin-top: var(--s-6);
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .14em;
+  color: var(--tinta-2);
+}.prancha__cota::before,
+.prancha__cota::after {
+  content: "";
+  flex: 1;
+  /* Linha de cota de verdade: a caixa tem 9 px de altura para os traços de
+     extremidade caberem, e a LINHA é um fundo de 1 px centrado nela. Com
+     `height: 1px` as bordas laterais também teriam 1 px e não haveria tique
+     nenhum — que foi como isto nasceu errado. */
+  height: 9px;
+  border-left: 1px solid var(--filete-forte);
+  border-right: 1px solid var(--filete-forte);
+  background: linear-gradient(var(--filete-forte), var(--filete-forte))
+              center / 100% 1px no-repeat;
+}@media (max-width: 1023px) {
+  .prancha__linha { grid-template-columns: 1fr 1fr; gap: var(--s-4) var(--s-5); }
+}@media (max-width: 560px) {
+  .prancha__linha { grid-template-columns: 1fr; }
+  .prancha__cota { letter-spacing: .08em; }
+}/* ============================================================
+   14. PLANTA — gêmeo digital isométrico em WebGL2 escrito à mão
+   Sem Three.js: a geometria é gerada por código, a matemática de matriz tem
+   60 linhas, e o shader é do projeto. A decisão está registrada em memoria.md.
+   ============================================================ */.planta {
+  position: relative;
+  margin-top: var(--gap-bloco);
+  aspect-ratio: 16 / 9;
+  background: var(--traco-papel);
+  border: 1px solid var(--filete);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+}.planta:active { cursor: grabbing; }/* Absoluto pelo mesmo motivo de .braco__tela: aqui o `aspect-ratio` da
+   .planta já dá altura definida, então o ciclo não fecha hoje — mas a
+   armadilha fica armada para o dia em que a altura virar automática. */.planta__tela { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }.planta__grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--traco-grade) 1px, transparent 1px),
+    linear-gradient(90deg, var(--traco-grade) 1px, transparent 1px);
+  background-size: 32px 32px;
+}.planta__legenda {
+  position: absolute;
+  left: var(--s-4);
+  bottom: var(--s-4);
+  right: var(--s-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  color: var(--tinta-2);
+  pointer-events: none;
+}.planta__dica {
+  position: absolute;
+  right: var(--s-4);
+  top: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: .12em;
+  color: var(--tinta-2);
+  pointer-events: none;
+  transition: opacity .4s ease;
+}.planta.is-tocada .planta__dica { opacity: 0; }.planta__semwebgl {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: var(--s-5);
+  text-align: center;
+  font-size: var(--fs-small);
+  color: var(--tinta-suave);
+}.planta.is-indisponivel { cursor: default; }.planta.is-indisponivel .planta__semwebgl { display: grid; }.planta.is-indisponivel .planta__tela,
+.planta.is-indisponivel .planta__dica,
+.planta.is-indisponivel .planta__legenda { display: none; }@media (max-width: 700px) { .planta { aspect-ratio: 4 / 3; } }/* ============================================================
+   16.1  A MARCA EXTRUDADA no cabeçalho (js/marca.js)
+   ============================================================
+   O logo i3 em três dimensões, à direita do cabeçalho de who-we-are. Terceiro
+   desenho em aresta do site, irmão do braço do herói e da planta.
+
+   A CAIXA TEM ALTURA DEFINIDA, E ISSO É A REGRA MAIS IMPORTANTE AQUI.
+   `position: absolute` com `top` E `bottom` dados contra `.cabecalho`, que tem
+   `min-height` própria — a altura NUNCA depende do que está dentro. É o que
+   impede a realimentação que já derrubou este site uma vez: `medir()` em
+   marca.js LÊ o retângulo da caixa e ESCREVE os atributos do canvas, que são o
+   tamanho intrínseco dele. Se a altura deixar de resolver, o intrínseco vaza
+   para o layout, o retângulo cresce, o quadro seguinte escreve maior — e a
+   caixa DOBRA por quadro até a página ficar impossível de rolar. Estar fora do
+   fluxo é o que garante que o ciclo não tenha por onde fechar.
+
+   Vale a regra inteira: componente que LÊ o próprio retângulo e ESCREVE o
+   próprio tamanho não pode participar do fluxo.
+
+   A LARGURA É RESERVADA NA COLUNA DE TEXTO, não deixada por conta da sorte.
+   `.cabecalho--marca .container` ganha o padding direito exato da peça mais um
+   respiro, então o h1 quebra ANTES da marca em qualquer largura de janela. A
+   alternativa — confiar em `max-width: 18ch` do h1 dar folga — depende da
+   métrica da fonte, e métrica de fonte não é garantia. */.cabecalho--marca {
+  /* Cores do desenho. Medidas sobre o navy do cabeçalho (#001D3D), que é o
+     mesmo nos dois temas — por isso não há override de tema aqui, pela mesma
+     razão que o herói não tem: o chão não muda.
+       #9FBEE0 opaco ...... 7,07:1
+       --azul-luz opaco ... 4,56:1
+     O ganho .92 põe a aresta ESTRUTURAL de frente em 7,60:1 e a de fundo em
+     3,19:1 — acima do piso de 3:1 do WCAG 1.4.11 para elemento gráfico que
+     carrega informação. A conta completa está em js/marca.js, no bloco PAPEL. */
+  --marca-traco: #9FBEE0;
+  --marca-ouro:  var(--azul-luz);
+  --marca-aceso: var(--azul-luz);
+  --marca-ganho: .92;
+
+  /* ESPESSURA PRÓPRIA, e ela precisava existir. marca.js lia
+     `--braco-linha-fina/-grossa`, que são declarados em `.heroi` — e `.heroi`
+     não é ancestral de `.marca3d`. A leitura devolvia vazio e a peça caía no
+     padrão do código (0,9/1,8) sem que ninguém soubesse. Pior: se um dia a
+     marca fosse parar dentro do herói, ela passaria a herdar a espessura do
+     braço em silêncio.
+
+     1,4/2,8 e não mais: o LIMITE é o glifo. O "3" tem ~48 px de largura na
+     moldura real e a haste dele ~12 px, então o contorno come o vazio interno
+     dos dois lados. Renderizado em 0,9/1,8 · 1,2/2,4 · 1,5/3,0 · 1,8/3,6, a
+     partir de 1,8 os contornos do "3" se encontram e o glifo vira uma mancha.
+     Em 1,4 o glifo desenha a 2,59 px (peso .85) e os vazios continuam abertos.
+
+     E a folga de enquadramento aguenta: a expansão em quad põe `meia + 0,8` px
+     para fora da caixa geométrica, ou seja 2,2 px a 2,8 de largura, contra os
+     6,8 px de folga que AR .96 garante. */
+  --marca-linha-fina: 1.4px;
+  --marca-linha-grossa: 2.8px;
+  /* Medido na composicao (ferramentas/previa_cabecalho.py) a 1440x620: a
+     23vw a peca ficava em 331 px e sobravam 78 px mortos entre o fim do h1
+     (que trava sozinho em `max-width: 18ch`) e a coluna da marca. A 26vw ela
+     vai a 374 px e a coluna de texto cai de 871 para 858 -- 13 px, que nao
+     mudam a quebra do titulo. O respiro sai do vao morto, nao do texto. */
+  --marca3d-larg: clamp(220px, 26vw, 380px);
+}/* Reserva a coluna: o texto nunca alcança a peça. */.cabecalho--marca .container {
+  padding-right: calc(var(--pad-lateral) + var(--marca3d-larg) + var(--s-6));
+}/* ============================================================
+   17b. FEIXE — quatro fios trançados, com energia circulando
+   Uma linha contínua que atravessa a página como um chicote de cabos: quatro
+   fios que trocam de posição entre si e voltam, e um pulso de luz que percorre
+   cada um deles em tempos diferentes. Não é enfeite — é o assunto da empresa
+   desenhado: o que ela entrega é justamente o caminho por onde o sinal passa.
+
+   POR QUE UM TRECHO POR SEÇÃO. O feixe cruza navy, branco, navy de novo e
+   off-white. Um SVG só teria de trocar de cor no meio do caminho, com gradiente
+   e paradas calculadas em JavaScript — e, pior, um SVG posicionado por cima de
+   quatro seções opacas ou fica atrás de todas (invisível) ou à frente de todas
+   (por cima do texto). Um trecho por seção herda a tinta certa e vive atrás do
+   conteúdo dela. As emendas fecham porque TODO trecho começa e termina nos
+   mesmos quatro x — 20, 40, 60 e 80 —, então qualquer trecho encaixa em
+   qualquer outro.
+
+   Medido: #6E8093 dá 4,06:1 sobre branco, 3,71:1 sobre off-white e 3,67:1
+   sobre o quente; branco a 45% dá 3,31:1 sobre --azul-bloco. O pulso usa
+   `--accent-txt`, que resolve para `--azul-txt` #2C6396 no claro (6,30:1) e
+   é reapontado para `--azul-luz` nas superfícies escuras (4,56:1).
+   ============================================================ */.tem-feixe { position: relative; }.tem-feixe > .container { position: relative; z-index: 1; }.feixe {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  --feixe-tinta: #6E8093;
+  --feixe-brilho: var(--accent-txt);
+  /* A faixa encosta na borda esquerda do container, com 12 px de respiro. A
+     largura é responsiva porque a margem não é: com `--container` em 1376 px e
+     `--pad-lateral` em 48, uma janela de 1440 deixa 80 px à esquerda do texto e
+     uma de 1920 deixa 320. */
+}.secao--escura .feixe,
+.cabecalho .feixe {
+  /* .38 era o valor até 2026-08-25, medido sobre #001D3D. Com o bloco escuro
+     clareando para --azul-bloco #0D4477 o mesmo alfa caiu para 2,79:1 e
+     passou a REPROVAR o piso de 3:1 do WCAG 1.4.11 — e este feixe carrega
+     informação, não é filete decorativo. Medido sobre o bloco novo:
+       .38 -> 2,79:1  reprova      .45 -> 3,31:1  passa, e é o mínimo que passa
+     Superfície mais clara pede MAIS alfa, não menos: é contraintuitivo e é
+     exatamente o tipo de número que some numa troca de paleta. */
+  --feixe-tinta: rgba(255, 255, 255, .45);
+}@media (max-width: 1439px) {
+  .feixe { display: none; }
+}/* O SVG ocupa a LARGURA INTEIRA da seção, e não uma faixa na margem: é o que
+   permite o barramento trocar de lado no meio da página. Ele passa POR TRÁS do
+   conteúdo (z-index 0 contra 1 do container), e os trechos horizontais ficam
+   entre 7% e 16% da altura — dentro do respiro superior da seção, onde não há
+   texto para atravessar.
+
+   `preserveAspectRatio: none` estica só o eixo Y, e com geometria ortogonal
+   isso é inofensivo: vertical continua vertical, horizontal continua
+   horizontal. Foi por isso que a curva saiu — bezier sob escala não uniforme
+   vira outra curva, e o ângulo do trançado mudava de seção para seção. */.feixe__svg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}/* O feixe é ANOTAÇÃO DE MARGEM, e margem é o que falta em tela estreita: ele
+   pede a própria largura mais 12 px de respiro à esquerda do texto, e isso só
+   existe a partir de 1440 px. Abaixo disso ele sai, em vez de correr por cima
+   da coluna. */.feixe__pista {
+  fill: none;
+  stroke: var(--feixe-tinta);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}/* O PULSO. Uma cópia do mesmo fio, com o traço quebrado em um segmento curto e
+   um vão longo: `pathLength="100"` normaliza o comprimento, então `4 96` é
+   sempre 4% de luz e 96% de nada, em qualquer trecho de qualquer altura. O que
+   anima é só o deslocamento do tracejado — uma propriedade, um segmento
+   viajando. */.feixe__pulso {
+  fill: none;
+  stroke: var(--feixe-brilho);
+  stroke-width: 2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 4 96;
+  animation: feixe-corre 5.5s linear infinite;
+  animation-delay: calc(var(--f, 0) * -1.35s);
+  opacity: .9;
+}/* No escuro o pulso brilha de verdade; no claro ele é tinta que corre, porque
+   halo dourado sobre papel branco não existe — dá 1,60:1. */.secao--escura .feixe__pulso,
+.cabecalho .feixe__pulso {
+  filter: drop-shadow(0 0 3px var(--azul-luz));
+}@media (prefers-reduced-motion: reduce) {
+  .feixe__pulso { animation: none; opacity: 0; }
+}/* A faixa "From strategy to startup": a fotografia SOBE, revelada de baixo
+   para cima por clip-path, enquanto encolhe da escala 1,06 para 1. É a mesma
+   direção de movimento do rodapé, no material que a faixa tem — sem mexer na
+   caixa, que é full-bleed. */.faixa .faixa__foto {
+  clip-path: inset(100% 0 0 0);
+  transform: scale(1.06);
+  transition: clip-path 1.15s var(--curva), transform 1.5s var(--curva);
+}.faixa.is-visivel .faixa__foto {
+  clip-path: inset(0 0 0 0);
+  transform: scale(1);
+}@media (prefers-reduced-motion: reduce) {
+  .faixa .faixa__foto { clip-path: none; transform: none; transition: none; }
+}/* `display: block` já vem da definição do componente (§17); aqui entra só o
+   que é do ponteiro. Declarar de novo faria a mesma propriedade viver em dois
+   lugares -- e `ferramentas/conflitos.py` acusou na hora. */.prancha__moldura picture { transition: transform .85s var(--curva); }/* POR QUE O ZOOM VIVE NO `picture` E NÃO NO `img`, e isto não é preferência.
+   `.prancha__moldura img` JÁ TEM um `transform`, escrito pela entrada por
+   rolagem (§21): `scale(1 + (1 - --avanco) * .06)`. Pôr o hover no mesmo
+   elemento significaria ou sobrescrever a entrada, ou transicionar uma
+   propriedade que muda A CADA QUADRO durante a rolagem -- e transição sobre
+   valor que o scroll reescreve é engasgo garantido.
+
+   Aninhados, os dois transforms se MULTIPLICAM: o `img` continua sendo da
+   rolagem, o `picture` é do ponteiro, e cada um tem a sua transição. Nenhum
+   dos dois sabe do outro.
+
+   E O HOVER NÃO TOCA OS IRMÃOS. A primeira prancha tinha destaque com
+   `:has()` -- o item apontado crescia e os outros caíam para 38% de opacidade
+   -- e o usuário mandou tirar, com razão: a fileira inteira reagindo à passada
+   do ponteiro chamava mais atenção para o mecanismo que para as fotografias.
+   Aqui só o item apontado muda. */.prancha__item:hover .prancha__moldura picture,
+.prancha__item:focus-within .prancha__moldura picture { transform: scale(1.045); }/* A marca de registro acende. Transitória e sob o ponteiro, então não entra
+   no teto de dois dourados por dobra (design.md §6.5) -- a mesma isenção que
+   a lente já tem. */.prancha__moldura::before,
+.prancha__moldura::after { transition: background-color .25s ease; }/* ============================================================
+   20.2  HOVER DAS FOTOGRAFIAS (prancha e setores)
+   O mesmo gesto que a galeria já estabeleceu: a foto AVANÇA de leve, a marca
+   de registro acende e o índice vira acento. Nada mais — e nada nos irmãos.
+   ============================================================ */.prancha__item:hover .prancha__moldura::before,
+.prancha__item:hover .prancha__moldura::after,
+.prancha__item:focus-within .prancha__moldura::before,
+.prancha__item:focus-within .prancha__moldura::after { background: var(--azul); }/* O número da vista e o tique da linha de referência: a anotação responde
+   junto com a folha, que é como uma prancha real se lê -- aponta-se a vista e
+   a cota daquela vista é que importa. */.prancha__idx, .prancha__tique { transition: color .25s ease, background-color .25s ease; }.prancha__item:hover .prancha__idx,
+.prancha__item:focus-within .prancha__idx { color: var(--accent-txt); }.prancha__item:hover .prancha__tique,
+.prancha__item:focus-within .prancha__tique { background: var(--azul); }/* --- setores ------------------------------------------------------------
+   Aqui já existia a LENTE, que abre sob o ponteiro e revela a fotografia por
+   baixo do traço. O que faltava era a folha reagir junto: a lente sozinha é um
+   instrumento apontado para o card, não o card respondendo.
+
+   O zoom vai em `.lente` inteira -- fotografia e canvas juntos -- e não só na
+   imagem: com WebGL ativo, `.lente.is-gl .lente__foto` está em opacidade 0 e
+   quem desenha é o canvas. Escalar só o `<img>` não moveria nada. */.setor__midia .lente { transition: transform .85s var(--curva); }.setor:hover .setor__midia .lente,
+.setor:focus-within .setor__midia .lente { transform: scale(1.04); }/* --- CLP explodido (capabilities) ---------------------------------------
+   Era um ARMÁRIO inteiro -- placa, trilhos, disjuntores, canaleta, porta -- e
+   o usuário não entendeu a peça: com tanta parte e a porta cobrindo a frente,
+   a leitura era "uma caixa". Virou um CLP: seis módulos numa fileira só, que
+   se explicam contando.
+
+   FUNDO ESCURO COM GRADE, para acompanhar as outras. O escuro é obrigatório e
+   não estético: o aceso da peça é `--azul-luz`, que sobre papel #F2F5F8 dá
+   2,00:1 e a lente APAGARIA o desenho em vez de acendê-lo. Sobre `--sup-3`
+   ele dá 4,56:1. É a mesma conta que a planta fez em 19/08 — só mudou a cor
+   que a faz.
+
+   A grade é a mesma de `.planta__grade`, com o mesmo token e o mesmo passo de
+   32 px: é papel milimetrado por baixo do desenho, e não textura. */.clp {
+  aspect-ratio: 16 / 9;
+  background-color: var(--sup-3);
+  background-image:
+    linear-gradient(var(--traco-grade) 1px, transparent 1px),
+    linear-gradient(90deg, var(--traco-grade) 1px, transparent 1px);
+  background-size: 32px 32px;
+  --clp-traco: #9FBEE0;
+  --clp-aceso: var(--azul-luz);
+  --clp-ganho: .95;
+  cursor: grab;
+  touch-action: pan-y;   /* o arrasto orbita; a página continua rolando */
+}.clp:active { cursor: grabbing; }.clp .peca__tela:focus-visible { outline: 2px solid var(--foco-esc); outline-offset: -2px; }@media (min-width: 1024px) {
+  /* Especificidade (0,3,0) de propósito: precisa vencer `.reveal.is-visivel`
+     (0,2,0), que senão forçaria opacidade 1 e mataria a entrada por rolagem.
+     Vencer por ORDEM no arquivo funcionaria hoje e quebraria na primeira
+     reorganização — e este projeto já pagou esse preço três vezes. */
+  .prancha[data-progresso] .prancha__item {
+    --janela: .16;
+    --passo: .055;
+    --avanco: clamp(0, calc((var(--p, 1) - .06 - var(--i, 0) * var(--passo)) /
+                            var(--janela)), 1);
+    opacity: var(--avanco);
+    /* `translate3d` e não `translate`: a folha ganha camada própria e o
+       navegador deixa de repintar a fileira inteira a cada quadro. */
+    transform: translate3d(0, calc((1 - var(--avanco)) * 40px), 0);
+    /* O `.reveal` traz desfoque e transição próprios. Aqui quem manda é a
+       rolagem, e uma transição de .85s sobre um valor que muda a cada quadro
+       é engasgo garantido — a mesma lição que a rolagem suave já registrou. */
+    filter: none;
+    transition: none;
+  }
+}@media (max-width: 1023px) {
+  /* `--avanco: 1` explícito, e não deixado indefinido: sem ele as regras que
+     consomem a variável (marca de registro, legenda, assentamento da foto)
+     cairiam em `var()` inválido. O resultado até seria parecido, mas por
+     acidente de fallback — e acidente não se documenta, se conserta. */
+  .prancha .prancha__item { --avanco: 1; }
+  /* A linha de referência seguia `--p` para se desenhar ANTES das folhas. Com
+     as folhas fora do `--p`, ela ficaria sendo o único gesto preso a um motor
+     que não governa mais nada. */
+  .prancha { --datum: 1; }
+}/* A LINHA DE REFERÊNCIA VEM PRIMEIRO, e fecha em .06 — exatamente onde a
+   primeira folha começa. É a ordem de um desenho: linha de construção, depois
+   as vistas. Se as duas entrassem juntas, a linha seria só mais uma coisa
+   aparecendo. */.prancha { --datum: clamp(0, calc(var(--p, 1) / .06), 1); }/* A fotografia se assenta DENTRO do recorte, de 1,06 para 1. Escalar a folha
+   inteira borraria o filete de 1px da moldura. */.prancha__moldura img {
+  transform: scale(calc(1 + (1 - var(--avanco)) * .06));
+  transform-origin: 50% 60%;
+}/* A marca de registro se desenha enquanto a folha assenta. */.prancha__moldura::before { transform: scaleX(var(--avanco)); transform-origin: left; }/* A SEQUÊNCIA LIGADA À ROLAGEM SÓ VALE ONDE A FILEIRA É UMA FILEIRA, e isso
+   é conserto de um defeito relatado no celular em 21/08: as fotografias
+   demoravam a aparecer e só acendiam quando o visitante já estava olhando a
+   segunda.
+
+   A CAUSA NÃO ERA REDE. Medido: as quatro imagens já estavam BAIXADAS antes de
+   qualquer rolagem — `fetchpriority="high"` faz o trabalho dele. O que chegava
+   tarde era a opacidade.
+
+   O MOTOR TROCA DE LEITURA SOZINHO, e ninguém tinha notado. `main.js §7` mede
+   de dois jeitos, escolhidos pela altura do próprio elemento: peça mais BAIXA
+   que a janela usa a travessia inteira; peça mais ALTA usa `altura − janela`,
+   que só começa a contar quando o topo dela encosta no topo da tela. Medido na
+   home:
+
+     largura   colunas   altura da peça   janela   leitura
+      1440        4           447 px       900     baixa   <- os tempos são daqui
+      1024        4           377 px       900     baixa
+       900        2         1.063 px       900     ALTA
+       700        2           887 px       849     ALTA
+       620        2           825 px       850     baixa (por 25 px de margem!)
+       560        1         2.555 px       851     ALTA
+       390        1         1.893 px       853     ALTA
+
+   Ou seja: os tempos `.06 / .055 / .16` foram afinados para a leitura BAIXA e
+   passaram a ser aplicados sobre a ALTA em tudo abaixo de 1024 — tablet
+   incluído, não só celular. E em 620 o modo certo voltava por acidente
+   aritmético, o que é pior que estar errado.
+
+   O QUE O VISITANTE VIA, medido a 390 px:
+
+     rolagem              folha 1 na tela      opacidade
+     topo da peça  +0      y   41 (visível)       0
+                 +200      y −192 (já saiu)       0,83
+                 +400      y −399 (sumiu)         1
+
+   A folha 1 nunca era vista: ela acendia enquanto subia para fora da tela.
+
+   O CONSERTO NÃO É REAFINAR OS NÚMEROS. Numa coluna empilhada, "quatro folhas
+   entrando em sequência" não descreve nada — o visitante encontra uma de cada
+   vez, e a sequência é o próprio rolar. Então abaixo de 1024 cada folha se
+   revela quando ELA chega, pelo `.reveal` que o resto do site inteiro usa, com
+   o escalonamento vindo do mesmo `--i` que já estava no HTML.
+
+   REGRA QUE FICA: animação atada a `--p` tem de declarar em que LEITURA ela
+   foi afinada. O motor troca de modo pela altura do elemento, e a altura muda
+   com a largura da janela — então uma peça pode mudar de mecanismo sem que uma
+   linha de CSS dela tenha sido tocada. */.prancha__moldura::after  { transform: scaleY(var(--avanco)); transform-origin: top; }/* A legenda só entra depois de a folha estar quase pousada. */.prancha__legenda { opacity: clamp(0, calc((var(--avanco) - .55) / .45), 1); }/* FALHA PARA O LADO SEGURO. Sem o JS de progresso, com movimento reduzido, ou
+   se `--p` nunca for escrito, `--avanco` precisa valer 1 — senão a seção
+   inteira fica invisível. O padrão de `--p` já é 1 acima; estas duas regras
+   cobrem os casos em que a variável existe mas o mecanismo não. */.prancha.is-estatico,
+.prancha:not([data-progresso]) { --datum: 1; }/* ---------- 21.1 Prancha: as folhas entram na ordem, ao rolar ----------
+   `--avanco` é o quanto ESTA folha já progrediu (0..1).
+
+   A JANELA FOI REFEITA, E A CONTA É O MOTIVO. O usuário reportou que as quatro
+   fotos "só aparecem quando você arrasta para quase depois delas", e a versão
+   anterior fazia exatamente isso — não por acaso, por aritmética.
+
+   A prancha é MAIS BAIXA que a janela, então o módulo 7 do main.js mede a
+   travessia inteira: `--p` vale 0 quando ela ainda está inteira abaixo da
+   dobra e 1 quando ela já saiu inteira pelo topo. Ou seja, `--p` NÃO é "quanto
+   dela está visível" — é onde ela está no percurso. Com a janela antiga
+   (`.25` de duração, passo `.72`) a quarta folha só fechava em `--p` .89:
+
+     vh = 900, prancha ~470 px de altura  ->  --p = (900 - topo) / 1370
+       --p .34  a fileira acabou de caber inteira na tela
+       --p .50  a fileira está no meio da janela
+       --p .89  o topo da fileira está 275 px ACIMA do topo da janela
+
+   .89 é a prancha praticamente fora da tela. A animação estava certa e chegava
+   tarde demais para ser vista.
+
+   Agora a última folha fecha em .385 — pouco depois de a fileira caber inteira
+   e antes de ela chegar ao meio da janela. As quatro pousam enquanto a fileira
+   sobe pela metade de baixo da tela, que é onde o olho está.
+
+     folha   começa   termina
+       01     .060      .220
+       02     .115      .275
+       03     .170      .330
+       04     .225      .385
+
+   AS JANELAS SE SOBREPÕEM de propósito: o passo (.055) é um terço da duração
+   (.16). Sem sobreposição a fila entra em quatro tempos separados e lê como
+   quatro animações; com ela, lê como uma passada só.
+
+   E A REDE FOI CORRIGIDA JUNTO. O tempo era metade do defeito; a outra metade
+   é que `loading="lazy"` só dispara o download quando o navegador julga a
+   imagem perto da janela. As quatro folhas passaram a ser `fetchpriority=high`
+   sem lazy — ver a nota em `imagem()` do build_paginas.py. Corrigir só uma das
+   duas causas deixaria o defeito de pé em metade dos casos. */.prancha.is-estatico .prancha__item,
+.prancha:not([data-progresso]) .prancha__item { --avanco: 1; }

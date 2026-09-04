@@ -1,0 +1,121 @@
+  /* ---------- 5. Intro: o lockup se revela ----------
+     REESCRITA EM 2026-08-25 (design.md §3.5, doit.md Fase 3).
+
+     A versão anterior era um FLIP: media a peça da intro, media um destino
+     declarado no HTML (`data-intro-destino`), e animava `transform` entre os
+     dois — a marca voava e pousava sobre uma cópia dela mesma no herói,
+     corrigindo a diferença de moldura por um fator `data-encaixe`.
+
+     DUAS COISAS TIRARAM O CHÃO DESSE VOO, e nenhuma delas é gosto:
+
+       1. O herói virou VÍDEO FULL-BLEED (plano.md §3.4): sem CTA grande, sem
+          objeto 3D, sem legenda de instrução. Não há mais logo dentro dele —
+          ou seja, não há destino. Pousar na marca do nav seria pior que não
+          pousar: o nav carrega a marca ISOLADA e a intro carrega o LOCKUP, e
+          o voo terminaria numa forma que não é a que partiu.
+
+       2. A marca virou a ARTE REAL, que é PNG facetado. O desenho glifo a
+          glifo (`stroke-dasharray` sobre três `<path>` normalizados por
+          `pathLength`) traçava o RE-DESENHO — exatamente o erro que o cliente
+          reclamou. Não há contorno a traçar, e não faz falta.
+
+     O que ficou é o gesto que um lockup pede: ser LIDO da esquerda para a
+     direita, marca primeiro e wordmark depois. Isso é `clip-path`, é CSS puro,
+     e está em style.css §5 (`intro-revela`). O JS ficou só com o que o CSS não
+     alcança: medir a frase em pixels, levantar o véu e garantir que a intro
+     termine mesmo quando o navegador congela a aba.
+
+     Linha do tempo, 5,6s:
+       0     → 1,0s  o lockup é revelado da esquerda para a direita (CSS)
+       0     → 4,0s  a frase escreve (1s), fica (2s) e apaga (1s)
+       4,0s  → 5,6s  o véu levanta
+
+     A curva vai NO KEYFRAME, não nas opções. Na Web Animations API o easing
+     da opção deforma o progresso global: com curva exponencial o offset .714
+     seria alcançado por volta de 1,1s reais e o véu começaria a abrir com a
+     frase ainda escrita. */
+  (function () {
+    var intro = document.querySelector(".intro");
+    if (!intro) return;
+
+    var encerrado = false;
+
+    var encerrar = function () {
+      if (encerrado) return;
+      encerrado = true;
+      document.documentElement.classList.remove("intro-ativa");
+      if (intro.parentNode) intro.parentNode.removeChild(intro);
+    };
+
+    var TOTAL = 5600;
+    var PARTIDA = 4000 / TOTAL;
+
+    var animar = function () {
+      if (reduzido || !intro.animate) {
+        window.setTimeout(encerrar, reduzido ? 600 : 1600);
+        return;
+      }
+      /* O véu só começa a abrir depois que a última letra saiu da tela. */
+      var veu = intro.animate([
+        { opacity: 1, offset: 0, easing: "linear" },
+        { opacity: 1, offset: PARTIDA, easing: "linear" },
+        { opacity: 0, offset: 1 }
+      ], { duration: TOTAL, fill: "forwards" });
+
+      veu.onfinish = encerrar;
+      window.setTimeout(encerrar, TOTAL + 600);
+    };
+
+    /* O cursor da frase caminha por transform, então precisa da largura real
+       do texto em pixels — a única medida que o CSS sozinho não alcança. */
+    var texto = intro.querySelector(".intro__texto");
+    if (texto) {
+      /* Abaixo de 440px a frase quebra em duas linhas (CSS §5) e o cursor
+         passa a percorrer uma de cada vez, então ali quem importa é a largura
+         de CADA linha e não a da frase. As tres medidas saem juntas: custa um
+         `getBoundingClientRect` a mais e evita um segundo caminho de codigo
+         que so roda no celular -- ou seja, o caminho que ninguem testa.
+
+         `--largura-frase` continua sendo escrita como sempre: no desktop as
+         duas linhas sao `display: inline` e a caixa do `.intro__texto` e a
+         reta unica de sempre. */
+      var linhas = texto.querySelectorAll(".intro__linha");
+      var medirFrase = function () {
+        intro.style.setProperty("--largura-frase",
+          Math.round(texto.getBoundingClientRect().width) + "px");
+        for (var i = 0; i < linhas.length && i < 2; i++) {
+          intro.style.setProperty("--l" + (i + 1),
+            Math.round(linhas[i].getBoundingClientRect().width) + "px");
+        }
+      };
+      medirFrase();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(medirFrase);
+    }
+
+    /* Rede de segurança que não depende de requestAnimationFrame: numa aba em
+       segundo plano o navegador congela rAF e as animações, e sem isto a
+       intro ficaria presa cobrindo o site. */
+    window.setTimeout(encerrar, 6800);
+
+    /* Quem abre o site numa aba de fundo não deve encontrar uma abertura de
+       cinco segundos ao voltar: nesse caso a intro simplesmente não acontece. */
+    if (document.visibilityState !== "visible") { encerrar(); return; }
+
+    var iniciado = false;
+    var iniciar = function () {
+      if (iniciado) return;
+      iniciado = true;
+      window.requestAnimationFrame(animar);
+    };
+    /* Esperar o "load" da página inteira atrasaria a intro por segundos sem
+       necessidade: a peça é um PNG de 24 KB que já está no HTML. */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(iniciar);
+    window.setTimeout(iniciar, 900);
+
+    /* quem já conhece o site pula: clique, tecla ou rolagem encerram na hora */
+    intro.addEventListener("click", encerrar);
+    window.addEventListener("keydown", encerrar, { once: true });
+    window.addEventListener("wheel", encerrar, { once: true, passive: true });
+    window.addEventListener("touchstart", encerrar, { once: true, passive: true });
+  })();
+

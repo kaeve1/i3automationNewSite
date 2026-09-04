@@ -1,0 +1,118 @@
+{
+ "movel": {
+  "/": {
+   "lcp": 11836,
+   "fcp": 3320,
+   "cls": 0.1868,
+   "tbt": 89,
+   "longas": 3,
+   "pedidos": 49,
+   "total": 1622954,
+   "img": 1196903,
+   "script": 199659,
+   "css": 86672,
+   "fonte": 112440,
+   "doc": 27280
+  },
+  "/quem-somos/": {
+   "lcp": 17332,
+   "fcp": 1680,
+   "cls": 0,
+   "tbt": 55,
+   "longas": 1,
+   "pedidos": 44,
+   "total": 3169195,
+   "img": 2840509,
+   "script": 140721,
+   "css": 77318,
+   "fonte": 78054,
+   "doc": 26540
+  },
+  "/treinamentos/": {
+   "lcp": 3240,
+   "fcp": 2116,
+   "cls": 0.1791,
+   "tbt": 6,
+   "longas": 1,
+   "pedidos": 47,
+   "total": 864956,
+   "img": 498272,
+   "script": 154541,
+   "css": 88805,
+   "fonte": 78063,
+   "doc": 39222
+  },
+  "/contato/": {
+   "lcp": 3196,
+   "fcp": 2052,
+   "cls": 0.0047,
+   "tbt": 66,
+   "longas": 2,
+   "pedidos": 44,
+   "total": 477643,
+   "img": 95181,
+   "script": 195865,
+   "css": 80368,
+   "fonte": 78086,
+   "doc": 22158
+  }
+ },
+ "desktop": {
+  "/": {
+   "lcp": 2572,
+   "fcp": 2300,
+   "cls": 0.198,
+   "tbt": 0,
+   "longas": 0,
+   "pedidos": 60,
+   "total": 156439555,
+   "img": 156045749,
+   "script": 199555,
+   "css": 86453,
+   "fonte": 74554,
+   "doc": 27236
+  },
+  "/quem-somos/": {
+   "lcp": 304,
+   "fcp": 304,
+   "cls": 0.1536,
+   "tbt": 0,
+   "longas": 0,
+   "pedidos": 46,
+   "total": 2081652,
+   "img": 1790884,
+   "script": 140691,
+   "css": 77352,
+   "fonte": 40177,
+   "doc": 26540
+  },
+  "/treinamentos/": {
+   "lcp": 320,
+   "fcp": 320,
+   "cls": 0.0204,
+   "tbt": 0,
+   "longas": 0,
+   "pedidos": 48,
+   "total": 857770,
+   "img": 531760,
+   "script": 151874,
+   "css": 88759,
+   "fonte": 40186,
+   "doc": 39206
+  },
+  "/contato/": {
+   "lcp": 0,
+   "fcp": 0,
+   "cls": 0,
+   "tbt": 0,
+   "longas": 0,
+   "pedidos": 44,
+   "total": 463525,
+   "img": 119311,
+   "script": 195729,
+   "css": 80200,
+   "fonte": 40177,
+   "doc": 22123
+  }
+ }
+}

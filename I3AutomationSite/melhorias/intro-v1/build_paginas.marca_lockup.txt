@@ -1,0 +1,51 @@
+def marca_lockup(classe='intro__marca', knockout=True, alt='', extra=''):
+    """O LOCKUP COMPLETO -- marca mais wordmark, 3,530:1.
+
+    `knockout=True` e a versao para fundo escuro: moldura, base e wordmark em
+    branco, e o "i3" CONTINUA NAVY, porque ele fica sobre o dourado e branco
+    sobre #FDC500 daria 1,6:1. O metodo que produz esse recorte e topologico e
+    esta em `build_marca.py` -- bounding box foi tentado e falhou.
+
+    UM ARQUIVO SO, EM RESOLUCAO NATIVA -- e o srcset saiu em 2026-08-26, junto
+    com o borrao reportado ("melhorar na animacao principalmente, esta
+    embacado").
+
+    O DEFEITO. O srcset era por DENSIDADE (1x/2x/3x) dimensionado para o slot
+    de 339 px do RODAPE. A intro rende o mesmo lockup em `min(72vw, 560px)`, e
+    descritor de densidade nao sabe disso: ele troca de arquivo quando o DPR
+    troca, nunca quando o slot muda. Medido no navegador a 1440 px:
+
+        DPR   arquivo escolhido   px de tela   ampliacao
+        1     339x96              560          1,65x
+        2     678x192            1120          1,65x
+        3     1017x288           1680          1,65x
+
+    **A mesma ampliacao em todos.** Nao era o DPR do avaliador: era um erro
+    fixo, e todo mundo via o mesmo borrao.
+
+    POR QUE UM ARQUIVO E MELHOR QUE CONSERTAR O SRCSET. Medido no build:
+
+        logo-completo-branco-96.png    339x96    17,4 KB
+        logo-completo-branco-192.png   678x192   39,7 KB
+        logo-completo-branco-268.png   946x268   25,3 KB   <- a NATIVA
+
+    A nativa tem 7,8x mais pixel que a de 96 e pesa 1,5x -- e pesa MENOS que a
+    intermediaria. Nao e anomalia de compressao: a arte e chapada em 7 cores
+    (`build_marca.py`), e PNG comprime regiao chapada quase de graca. O que
+    engorda os derivados e o anti-aliasing que o LANCZOS introduz ao reduzir.
+
+    Ou seja: o srcset gastava banda para entregar menos resolucao. Com um
+    arquivo so nao ha descritor para errar, o rodape (141 px de largura) recebe
+    uma reducao limpa em qualquer DPR, e a intro fica em 1,18x no pior caso
+    (DPR 2), contra os 1,65x de antes. 946 px e o teto real da arte do cliente
+    -- o recorte do lockup em `logo/logonova.png` tem 946x268 e nao existe
+    versao vetorial.
+
+    `width`/`height` sao os da arte, entao a proporcao declarada e a verdadeira
+    nos dois slots: a intro fixa a largura e o rodape fixa a altura."""
+    base = 'logo-completo-branco' if knockout else 'logo-completo'
+    a = (' alt="%s"' % alt) if alt else ' alt="" aria-hidden="true"'
+    return ('<img class="%s" src="brand/%s-268.png" '
+            'width="946" height="268"%s decoding="async"%s>'
+            % (classe, base, a, extra))
+

@@ -1,0 +1,53 @@
+<!-- GERADO POR ferramentas/extrair_enlaces.py — não editar à mão.
+     Cole o bloco inteiro dentro de .heroi__cena-mov em site/index.html. -->
+<svg class="heroi__rede" viewBox="0 0 1200 755" preserveAspectRatio="none"
+     aria-hidden="true" focusable="false">
+    <defs>
+      <path id="enl0" d="M466 563 L454 556 L456 551 L590 466 L590 463 L586 460 L531 428"/>
+      <path id="enl1" d="M699 298 L640 334"/>
+      <path id="enl2" d="M696 432 L670 449 L664 449 L652 443 L632 455"/>
+      <path id="enl3" d="M709 308 L656 341"/>
+      <path id="enl4" d="M259 411 L270 417 L276 417 L402 337 L408 339 L460 371 L466 371 L501 349"/>
+      <path id="enl5" d="M746 433 L737 439 L732 439 L685 410"/>
+      <path id="enl6" d="M619 266 L589 285 L584 285 L572 278"/>
+      <path id="enl7" d="M619 233 L519 296"/>
+      <path id="enl8" d="M531 255 L488 283 L490 287 L510 299"/>
+      <path id="enl9" d="M789 555 L807 544 L812 539 L808 535 L696 468 L697 464 L727 446"/>
+      <path id="enl10" d="M817 367 L716 307"/>
+      <path id="enl11" d="M332 447 L393 408"/>
+      <path id="enl12" d="M713 198 L706 199 L688 189 L665 203"/>
+      <path id="enl13" d="M955 417 L934 430 L926 432 L899 416"/>
+    </defs>
+    <g class="rede__traco">
+      <use href="#enl0" style="--len:250;--atraso:0.15s"/>
+      <use href="#enl1" style="--len:69;--atraso:0.22s"/>
+      <use href="#enl2" style="--len:74;--atraso:0.30s"/>
+      <use href="#enl3" style="--len:62;--atraso:0.38s"/>
+      <use href="#enl4" style="--len:283;--atraso:0.45s"/>
+      <use href="#enl5" style="--len:71;--atraso:0.53s"/>
+      <use href="#enl6" style="--len:54;--atraso:0.60s"/>
+      <use href="#enl7" style="--len:118;--atraso:0.68s"/>
+      <use href="#enl8" style="--len:79;--atraso:0.75s"/>
+      <use href="#enl9" style="--len:203;--atraso:0.82s"/>
+      <use href="#enl10" style="--len:117;--atraso:0.90s"/>
+      <use href="#enl11" style="--len:72;--atraso:0.97s"/>
+      <use href="#enl12" style="--len:55;--atraso:1.05s"/>
+      <use href="#enl13" style="--len:64;--atraso:1.12s"/>
+    </g>
+    <g class="rede__fluxo">
+      <g class="enlace" style="--len:250;--dur:5.38s;--atraso:2.35s"><use class="enlace__halo" href="#enl0"/><use class="enlace__nucleo" href="#enl0"/></g>
+      <g class="enlace" style="--len:69;--dur:4.29s;--atraso:5.00s"><use class="enlace__halo" href="#enl1"/><use class="enlace__nucleo" href="#enl1"/></g>
+      <g class="enlace" style="--len:74;--dur:4.31s;--atraso:3.37s"><use class="enlace__halo" href="#enl2"/><use class="enlace__nucleo" href="#enl2"/></g>
+      <g class="enlace" style="--len:62;--dur:4.25s;--atraso:5.98s"><use class="enlace__halo" href="#enl3"/><use class="enlace__nucleo" href="#enl3"/></g>
+      <g class="enlace" style="--len:283;--dur:5.58s;--atraso:4.98s"><use class="enlace__halo" href="#enl4"/><use class="enlace__nucleo" href="#enl4"/></g>
+      <g class="enlace" style="--len:71;--dur:4.30s;--atraso:2.74s"><use class="enlace__halo" href="#enl5"/><use class="enlace__nucleo" href="#enl5"/></g>
+      <g class="enlace" style="--len:54;--dur:4.20s;--atraso:5.32s"><use class="enlace__halo" href="#enl6"/><use class="enlace__nucleo" href="#enl6"/></g>
+      <g class="enlace" style="--len:118;--dur:4.58s;--atraso:3.85s"><use class="enlace__halo" href="#enl7"/><use class="enlace__nucleo" href="#enl7"/></g>
+      <g class="enlace" style="--len:79;--dur:4.35s;--atraso:6.45s"><use class="enlace__halo" href="#enl8"/><use class="enlace__nucleo" href="#enl8"/></g>
+      <g class="enlace" style="--len:203;--dur:5.10s;--atraso:5.22s"><use class="enlace__halo" href="#enl9"/><use class="enlace__nucleo" href="#enl9"/></g>
+      <g class="enlace" style="--len:117;--dur:4.58s;--atraso:3.18s"><use class="enlace__halo" href="#enl10"/><use class="enlace__nucleo" href="#enl10"/></g>
+      <g class="enlace" style="--len:72;--dur:4.31s;--atraso:5.79s"><use class="enlace__halo" href="#enl11"/><use class="enlace__nucleo" href="#enl11"/></g>
+      <g class="enlace" style="--len:55;--dur:4.20s;--atraso:4.10s"><use class="enlace__halo" href="#enl12"/><use class="enlace__nucleo" href="#enl12"/></g>
+      <g class="enlace" style="--len:64;--dur:4.26s;--atraso:2.50s"><use class="enlace__halo" href="#enl13"/><use class="enlace__nucleo" href="#enl13"/></g>
+    </g>
+</svg>

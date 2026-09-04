@@ -1,0 +1,1185 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Espécime Tipográfico i3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..500&display=swap">
+
+<style>
+/* ============================================================
+   Espécime tipográfico — i3Automations & Controls
+   Renderiza specs/design.md §2. Nenhum valor daqui é inventado:
+   todos vêm de site/css/tokens.css e site/css/style.css do UnidoCLP.
+   ============================================================ */
+
+/* ---------- Tema: claro por padrão ---------- */
+:root {
+  --ground:      #FFFFFF;
+  --ground-2:    #F2F5F8;
+  --ground-3:    #E7EDF4;
+  --ink:         #1A1A1A;
+  --ink-2:       #40607F;
+  --ink-3:       #5A5A5A;
+  --rule:        rgba(0, 53, 102, .16);
+  --rule-forte:  rgba(0, 53, 102, .34);
+  --marca:       #003566;
+  --accent:      #FDC500;
+  --accent-ink:  #6B5000;
+  --code-bg:     #F2F5F8;
+  --code-ink:    #003566;
+  --barra-bg:    #003566;
+  --barra-ink:   #FFFFFF;
+  --proibido:    #A31515;
+
+  /* ---------- Tokens de tipo: os valores reais do sistema ---------- */
+  --font: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --fs-display: clamp(2.75rem, 10.4vw, 12.5rem);
+  --fs-h2:      clamp(1.75rem, 2.3vw, 2.75rem);
+  --fs-h3:      clamp(1.5rem,  2vw,   2.375rem);
+  --fs-lead:    clamp(1.25rem, 1.46vw, 1.75rem);
+  --fs-body:    clamp(1rem,    1.04vw, 1.25rem);
+  --fs-small:   1.0625rem;
+  --fs-ui:      1rem;
+  --fs-eyebrow: .9375rem;
+  --fs-legal:   .875rem;
+
+  --s-1: 4px;  --s-2: 8px;  --s-3: 16px; --s-4: 24px;
+  --s-5: 32px; --s-6: 48px; --s-7: 64px; --s-8: 96px;
+
+  --container: 1376px;
+  --pad: 48px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:     #001D3D;
+    --ground-2:   #002A52;
+    --ground-3:   #003566;
+    --ink:        #FFFFFF;
+    --ink-2:      #8FB4DC;
+    --ink-3:      rgba(255, 255, 255, .74);
+    --rule:       rgba(255, 255, 255, .18);
+    --rule-forte: rgba(255, 255, 255, .36);
+    --marca:      #FFFFFF;
+    --accent:     #FDC500;
+    --accent-ink: #FDC500;
+    --code-bg:    #000814;
+    --code-ink:   #8FB4DC;
+    --barra-bg:   #000814;
+    --barra-ink:  #FFFFFF;
+    --proibido:   #FF9B8A;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground:     #001D3D;
+  --ground-2:   #002A52;
+  --ground-3:   #003566;
+  --ink:        #FFFFFF;
+  --ink-2:      #8FB4DC;
+  --ink-3:      rgba(255, 255, 255, .74);
+  --rule:       rgba(255, 255, 255, .18);
+  --rule-forte: rgba(255, 255, 255, .36);
+  --marca:      #FFFFFF;
+  --accent:     #FDC500;
+  --accent-ink: #FDC500;
+  --code-bg:    #000814;
+  --code-ink:   #8FB4DC;
+  --barra-bg:   #000814;
+  --barra-ink:  #FFFFFF;
+  --proibido:   #FF9B8A;
+}
+
+@media (max-width: 1023px) { :root { --pad: 32px; } }
+@media (max-width: 767px)  { :root { --pad: 20px; } }
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding-bottom: 72px;              /* espaço para a barra fixa */
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--ground);
+  -webkit-font-smoothing: antialiased;
+}
+
+p { margin: 0; hyphens: auto; -webkit-hyphens: auto; text-wrap: pretty; }
+h1, h2, h3 { margin: 0; hyphens: none; text-wrap: balance; }
+dl, dt, dd, ol, ul { margin: 0; padding: 0; }
+strong { font-weight: 500; }
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.env {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+/* ---------- Cabeçalho ---------- */
+.topo {
+  padding-block: var(--s-8) var(--s-7);
+  border-bottom: 1px solid var(--rule-forte);
+}
+
+.eyebrow {
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: var(--ink-2);
+}
+
+.topo__nome {
+  margin-top: var(--s-5);
+  font-size: var(--fs-display);
+  font-weight: 300;
+  line-height: .98;
+  letter-spacing: -.02em;
+  color: var(--marca);
+}
+
+.topo__lead {
+  margin-top: var(--s-5);
+  max-width: 46ch;
+  font-size: var(--fs-lead);
+  font-weight: 400;
+  line-height: 1.36;
+  color: var(--ink-3);
+}
+
+.ficha {
+  margin-top: var(--s-7);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s-4);
+  border-top: 1px solid var(--rule);
+  padding-top: var(--s-5);
+}
+.ficha__item { display: flex; flex-direction: column; gap: var(--s-2); }
+.ficha__rot {
+  font-size: var(--fs-legal);
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: var(--ink-2);
+}
+.ficha__val { font-size: var(--fs-small); font-weight: 400; color: var(--ink); }
+@media (max-width: 767px) { .ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- Seções ---------- */
+.secao {
+  padding-block: var(--s-8);
+  border-bottom: 1px solid var(--rule);
+}
+.secao--fundo { background: var(--ground-2); }
+
+.secao__cab {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  row-gap: var(--s-4);
+  align-items: start;
+  margin-bottom: var(--s-7);
+}
+.secao__esq { grid-column: span 4; }
+.secao__dir { grid-column: 5 / -1; }
+@media (max-width: 1023px) {
+  .secao__esq, .secao__dir { grid-column: 1 / -1; }
+}
+
+.secao__ref {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .02em;
+  color: var(--ink-2);
+  border-left: 2px solid var(--accent);
+  padding-left: 10px;
+}
+.secao__titulo {
+  margin-top: var(--s-3);
+  font-size: var(--fs-h2);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  color: var(--marca);
+}
+.secao__nota { max-width: 62ch; color: var(--ink-3); }
+.secao__nota + .secao__nota { margin-top: var(--s-4); }
+
+/* ---------- Escala ---------- */
+.esc { border-top: 1px solid var(--rule); }
+
+.esc__linha {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: baseline;
+  padding-block: var(--s-5);
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 1023px) {
+  .esc__linha { grid-template-columns: 1fr; gap: var(--s-3); }
+}
+
+.esc__dados { font-family: var(--mono); font-size: 13px; line-height: 1.7; }
+.esc__token { color: var(--code-ink); font-weight: 500; letter-spacing: .02em; }
+.esc__clamp { color: var(--ink-3); word-break: break-word; }
+.esc__papel {
+  font-family: var(--font);
+  font-size: var(--fs-legal);
+  color: var(--ink-2);
+}
+.esc__agora {
+  display: inline-block;
+  margin-top: var(--s-2);
+  padding: 2px 8px;
+  background: var(--accent);
+  color: #003566;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+}
+
+/* overflow-x:auto faz o eixo Y computar para auto: as amostras com
+   line-height .98/1 estouram o line box e disparam uma barra vertical
+   espúria. O padding dá folga ao glifo; a margem negativa devolve o ritmo. */
+.esc__caixa {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 12px;
+  margin-block: -12px;
+}
+.esc__amostra {
+  white-space: nowrap;
+  line-height: 1;
+  color: var(--ink);
+}
+.esc__amostra--display { font-size: var(--fs-display); font-weight: 300; letter-spacing: -.02em; }
+.esc__amostra--h2      { font-size: var(--fs-h2);      font-weight: 300; letter-spacing: -.01em; }
+.esc__amostra--h3      { font-size: var(--fs-h3);      font-weight: 400; letter-spacing: -.01em; }
+.esc__amostra--lead    { font-size: var(--fs-lead);    font-weight: 400; }
+.esc__amostra--body    { font-size: var(--fs-body);    font-weight: 400; }
+.esc__amostra--small   { font-size: var(--fs-small);   font-weight: 400; }
+.esc__amostra--ui      { font-size: var(--fs-ui);      font-weight: 500; }
+.esc__amostra--eyebrow { font-size: var(--fs-eyebrow); font-weight: 500; letter-spacing: .01em; }
+.esc__amostra--legal   { font-size: var(--fs-legal);   font-weight: 500; letter-spacing: .01em; }
+
+/* ---------- Pesos ---------- */
+.pesos { display: grid; gap: var(--s-6); }
+
+.peso {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: baseline;
+  padding-bottom: var(--s-5);
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 1023px) { .peso { grid-template-columns: 1fr; gap: var(--s-3); } }
+
+.peso__num {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  color: var(--code-ink);
+  font-variant-numeric: tabular-nums;
+}
+.peso__uso { margin-top: var(--s-2); font-size: var(--fs-legal); color: var(--ink-2); max-width: 30ch; }
+.peso__amostra {
+  font-size: clamp(1.75rem, 4vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -.01em;
+}
+.peso--300 .peso__amostra { font-weight: 300; }
+.peso--400 .peso__amostra { font-weight: 400; }
+.peso--500 .peso__amostra { font-weight: 500; }
+.peso--proibido .peso__amostra { font-weight: 700; color: var(--proibido); }
+.peso--proibido .peso__num { color: var(--proibido); }
+
+.aviso {
+  margin-top: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-left: 2px solid var(--proibido);
+  background: var(--ground-3);
+  font-size: var(--fs-small);
+  color: var(--ink);
+  max-width: 62ch;
+}
+
+/* ---------- Elementos ---------- */
+.elem {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: baseline;
+  padding-block: var(--s-6);
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 1023px) { .elem { grid-template-columns: 1fr; gap: var(--s-3); } }
+
+.elem__meta { font-family: var(--mono); font-size: 13px; line-height: 1.8; color: var(--ink-3); }
+.elem__seletor { color: var(--code-ink); font-weight: 500; letter-spacing: .02em; }
+.elem__prop { display: block; }
+.elem__prop b { font-weight: 500; color: var(--ink); }
+
+.d-h1      { font-size: var(--fs-display); font-weight: 300; line-height: .98;  letter-spacing: -.02em; color: var(--marca); }
+.d-h2      { font-size: var(--fs-h2);      font-weight: 300; line-height: 1.05; letter-spacing: -.01em; color: var(--marca); }
+.d-h3      { font-size: var(--fs-h3);      font-weight: 400; line-height: 1.08; letter-spacing: -.01em; color: var(--marca); }
+.d-lead    { font-size: var(--fs-lead);    font-weight: 400; line-height: 1.36; max-width: 46ch; }
+.d-corpo   { font-size: var(--fs-body);    font-weight: 400; line-height: 1.45; max-width: 62ch; }
+.d-eyebrow { font-size: var(--fs-eyebrow); font-weight: 500; letter-spacing: .01em; color: var(--ink-2); }
+.d-legal   { font-size: var(--fs-legal);   font-weight: 500; letter-spacing: .01em; color: var(--ink-3); }
+.d-mono    { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: .02em; color: var(--code-ink); }
+.d-mono-g  { font-family: var(--mono); font-size: 1.5rem; font-weight: 500; letter-spacing: .12em; color: var(--code-ink); }
+
+.d-num { display: flex; flex-direction: column; gap: var(--s-3); }
+.d-num__dt {
+  font-size: clamp(2.25rem, 3.4vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--marca);
+}
+.d-num__dd { font-size: var(--fs-small); font-weight: 400; color: var(--ink-3); max-width: 22ch; }
+
+.d-card { display: flex; flex-direction: column; gap: var(--s-2); }
+.d-card__t { font-size: 1.25rem; font-weight: 500; line-height: 1.2; letter-spacing: -.01em; }
+.d-card__p { font-size: var(--fs-small); line-height: 1.45; color: var(--ink-3); max-width: 46ch; }
+
+.d-ui {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 24px;
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  border: 1px solid var(--rule-forte);
+  background: var(--ground);
+  color: var(--ink);
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+.d-ui:hover { background: var(--marca); color: var(--ground); border-color: var(--marca); }
+
+/* ---------- Comparações lado a lado ---------- */
+.par {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-6);
+}
+@media (max-width: 767px) { .par { grid-template-columns: 1fr; } }
+
+.par__col { display: flex; flex-direction: column; gap: var(--s-3); }
+.par__rot {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .02em;
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+}
+.par__rot--bom { color: var(--accent-ink); border-bottom-color: var(--accent); }
+
+.cru { font-family: var(--font); font-size: var(--fs-h2); font-weight: 400; line-height: 1.4; letter-spacing: normal; }
+.sist { font-family: var(--font); font-size: var(--fs-h2); font-weight: 300; line-height: 1.05; letter-spacing: -.01em; }
+.sem-balance { text-wrap: none; }
+.com-balance { text-wrap: balance; }
+
+/* ---------- Medida ---------- */
+.medidas { display: flex; flex-direction: column; gap: var(--s-6); }
+.medida { display: flex; flex-direction: column; gap: var(--s-2); }
+.medida__rot {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .02em;
+  color: var(--ink-2);
+}
+.medida__caixa { border-left: 2px solid var(--rule-forte); padding-left: var(--s-4); }
+.m-46 { max-width: 46ch; font-size: var(--fs-lead); line-height: 1.36; }
+.m-62 { max-width: 62ch; }
+.m-18 { max-width: 18ch; font-size: var(--fs-h3); font-weight: 400; line-height: 1.08; letter-spacing: -.01em; color: var(--marca); }
+.m-22 { max-width: 22ch; font-size: var(--fs-small); color: var(--ink-3); }
+
+/* ---------- Código ---------- */
+pre {
+  margin: 0;
+  padding: var(--s-4);
+  background: var(--code-bg);
+  border-left: 2px solid var(--accent);
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--code-ink);
+  tab-size: 2;
+}
+code { font-family: var(--mono); font-size: .92em; }
+p code, li code { background: var(--code-bg); color: var(--code-ink); padding: 1px 5px; }
+
+/* ---------- Links em texto corrido ---------- */
+.corrido { max-width: 62ch; }
+.corrido a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color .18s ease;
+}
+.corrido a:hover { color: var(--ink-2); }
+
+/* ---------- Regras ---------- */
+.regras { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-4); max-width: 78ch; }
+.regras li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: var(--s-3);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--rule);
+}
+.regras b { font-weight: 500; }
+.regras__n {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+  padding-top: 4px;
+}
+
+/* ---------- Rodapé ---------- */
+.rodape { padding-block: var(--s-8); font-size: var(--fs-small); color: var(--ink-3); }
+.rodape__lista { list-style: none; margin: var(--s-4) 0 0; padding: 0; display: grid; gap: var(--s-2); max-width: 62ch; }
+
+/* ---------- Barra fixa: leitura ao vivo ---------- */
+.barra {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 10;
+  background: var(--barra-bg);
+  color: var(--barra-ink);
+  border-top: 1px solid rgba(255, 255, 255, .14);
+}
+.barra__interno {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding: 14px var(--pad);
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .02em;
+  font-variant-numeric: tabular-nums;
+}
+.barra__rot { color: rgba(255, 255, 255, .62); }
+.barra b { font-weight: 500; color: var(--accent); }
+@media (max-width: 767px) {
+  .barra__interno { gap: var(--s-3); font-size: 12px; }
+  .barra__opcional { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+
+<header class="topo">
+  <div class="env">
+    <p class="eyebrow">i3Automations &amp; Controls · sistema tipográfico</p>
+    <h1 class="topo__nome">Outfit</h1>
+    <p class="topo__lead">
+      Herdado exato do Universo do CLP, sem reinterpretação. Uma família, três pesos,
+      nove degraus fluidos. A regra que governa tudo: <strong>título grande = peso leve</strong>.
+    </p>
+
+    <dl class="ficha">
+      <div class="ficha__item">
+        <dt class="ficha__rot">Família</dt>
+        <dd class="ficha__val">Outfit — variável, 300–500</dd>
+      </div>
+      <div class="ficha__item">
+        <dt class="ficha__rot">Origem</dt>
+        <dd class="ficha__val">tokens.css + style.css do UnidoCLP, em produção</dd>
+      </div>
+      <div class="ficha__item">
+        <dt class="ficha__rot">Escala</dt>
+        <dd class="ficha__val">14 · 15 · 16 · 17 · 20 · 28 · 38 · 44 · 200</dd>
+      </div>
+      <div class="ficha__item">
+        <dt class="ficha__rot">Entrega</dt>
+        <dd class="ficha__val">.woff2 local, nunca CDN</dd>
+      </div>
+    </dl>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<section class="secao">
+  <div class="env">
+    <div class="secao__cab">
+      <div class="secao__esq">
+        <span class="secao__ref">design.md §2.1</span>
+        <h2 class="secao__titulo">A família</h2>
+      </div>
+      <div class="secao__dir">
+        <p class="secao__nota">
+          Outfit é sans-serif geométrica arredondada e <strong>fonte variável</strong>: um arquivo
+          cobre os pesos 300 a 500. São dois <code>.woff2</code> (latin e latin-ext) servidos de
+          <code>site/fonts/</code>, com <code>unicode-range</code> para o navegador só baixar o que
+          a página realmente usa — em EN-US, o latin-ext quase nunca desce.
+        </p>
+        <p class="secao__nota">
+          <strong>Uma família só para tudo.</strong> Sem fonte de display separada, sem serifa, sem
+          “fonte industrial pesada”. A única exceção é a monoespaçada de sistema, para dado técnico
+          (UEI, CAGE, NAICS, tags).
+        </p>
+      </div>
+    </div>
+
+    <pre>--font: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+--mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 300 500;        /* variável: um arquivo, três pesos */
+  font-display: swap;
+  src: url("/fonts/outfit-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* + o mesmo bloco para outfit-latin-ext.woff2 com o range estendido */</pre>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="secao secao--fundo">
+  <div class="env">
+    <div class="secao__cab">
+      <div class="secao__esq">
+        <span class="secao__ref">design.md §2.2</span>
+        <h2 class="secao__titulo">A escala</h2>
+      </div>
+      <div class="secao__dir">
+        <p class="secao__nota">
+          Nove degraus, todos em <code>clamp()</code> — <strong>nenhuma media query de tipo em todo
+          o site</strong>. O valor em destaque de cada linha é o tamanho que aquele token vale
+          <strong>agora</strong>, calculado na largura atual desta janela. Redimensione e ele muda.
+        </p>
+      </div>
+    </div>
+
+    <div class="esc">
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-display</div>
+          <div class="esc__clamp">clamp(2.75rem, 10.4vw, 12.5rem)</div>
+          <div class="esc__papel">44 → 200px · H1 do herói</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--display">Good control strategy</div>
+        </div>
+      </div>
+
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-h2</div>
+          <div class="esc__clamp">clamp(1.75rem, 2.3vw, 2.75rem)</div>
+          <div class="esc__papel">28 → 44px · título de seção</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--h2">Capabilities &amp; past performance</div>
+        </div>
+      </div>
+
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-h3</div>
+          <div class="esc__clamp">clamp(1.5rem, 2vw, 2.375rem)</div>
+          <div class="esc__papel">24 → 38px · subtítulo</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--h3">SCADA and PLC programming</div>
+        </div>
+      </div>
+
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-lead</div>
+          <div class="esc__clamp">clamp(1.25rem, 1.46vw, 1.75rem)</div>
+          <div class="esc__papel">20 → 28px · parágrafo de abertura</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--lead">We design, program and commission control systems.</div>
+        </div>
+      </div>
+
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-body</div>
+          <div class="esc__clamp">clamp(1rem, 1.04vw, 1.25rem)</div>
+          <div class="esc__papel">16 → 20px · corpo de texto</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--body">Oil &amp; gas, water treatment, paper mills and solar plants.</div>
+        </div>
+      </div>
+
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-small</div>
+          <div class="esc__clamp">1.0625rem — fixo</div>
+          <div class="esc__papel">17px · legenda, rótulo de número</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--small">Historized tags across PI System deployments</div>
+        </div>
+      </div>
+
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-ui</div>
+          <div class="esc__clamp">1rem — fixo</div>
+          <div class="esc__papel">16px · nav, botão, CTA</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--ui">Request a quote</div>
+        </div>
+      </div>
+
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-eyebrow</div>
+          <div class="esc__clamp">.9375rem — fixo</div>
+          <div class="esc__papel">15px · rótulo acima do título</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--eyebrow">Who we are</div>
+        </div>
+      </div>
+
+      <div class="esc__linha">
+        <div class="esc__dados">
+          <div class="esc__token">--fs-legal</div>
+          <div class="esc__clamp">.875rem — fixo</div>
+          <div class="esc__papel">14px · rodapé, legal</div>
+          <div class="esc__agora">—</div>
+        </div>
+        <div class="esc__caixa">
+          <div class="esc__amostra esc__amostra--legal">© 2026 i3 Automations &amp; Controls · Privacy Policy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="secao">
+  <div class="env">
+    <div class="secao__cab">
+      <div class="secao__esq">
+        <span class="secao__ref">design.md §2.3</span>
+        <h2 class="secao__titulo">Os pesos</h2>
+      </div>
+      <div class="secao__dir">
+        <p class="secao__nota">
+          Três pesos, e a distribuição é o inverso do reflexo comum: <strong>quanto maior o tipo,
+          mais leve ele fica</strong>. Título de 200px em 300; botão de 16px em 500. É essa inversão
+          que dá a assinatura visual do sistema — se um título grande aparecer em 600, o sistema quebrou.
+        </p>
+      </div>
+    </div>
+
+    <div class="pesos">
+      <div class="peso peso--300">
+        <div>
+          <div class="peso__num">300</div>
+          <p class="peso__uso">H1, H2, números de credibilidade. Todo tipo grande.</p>
+        </div>
+        <div class="peso__amostra">Since 2000, control systems that hold.</div>
+      </div>
+
+      <div class="peso peso--400">
+        <div>
+          <div class="peso__num">400</div>
+          <p class="peso__uso">Corpo, lead, H3. O peso padrão de leitura.</p>
+        </div>
+        <div class="peso__amostra">Since 2000, control systems that hold.</div>
+      </div>
+
+      <div class="peso peso--500">
+        <div>
+          <div class="peso__num">500</div>
+          <p class="peso__uso">Nav, botão, CTA, eyebrow, <code>strong</code>, dado técnico. O teto absoluto.</p>
+        </div>
+        <div class="peso__amostra">Since 2000, control systems that hold.</div>
+      </div>
+
+      <div class="peso peso--proibido">
+        <div>
+          <div class="peso__num">700</div>
+          <p class="peso__uso">Não existe no arquivo. O que você vê abaixo é falso-negrito.</p>
+        </div>
+        <div>
+          <div class="peso__amostra">Since 2000, control systems that hold.</div>
+          <p class="aviso">
+            <strong>Isto não é uma fonte, é um defeito.</strong> O arquivo variável cobre 300–500;
+            pedir 700 faz o navegador <em>sintetizar</em> o negrito engrossando o traço por conta
+            própria. Repare nas junções empastadas e no espacejamento que não fecha. Por isso
+            <code>strong</code> é <strong>500</strong> no sistema, nunca <code>bold</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="secao secao--fundo">
+  <div class="env">
+    <div class="secao__cab">
+      <div class="secao__esq">
+        <span class="secao__ref">design.md §2.3</span>
+        <h2 class="secao__titulo">Elemento por elemento</h2>
+      </div>
+      <div class="secao__dir">
+        <p class="secao__nota">
+          Cada elemento com seus três valores exatos: peso, entrelinha e tracking. À esquerda o que
+          vai no CSS; à direita o mesmo elemento renderizado com esses valores, no conteúdo real
+          do cliente.
+        </p>
+      </div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">h1</div>
+        <span class="elem__prop">font-size: <b>--fs-display</b></span>
+        <span class="elem__prop">font-weight: <b>300</b></span>
+        <span class="elem__prop">line-height: <b>.98</b></span>
+        <span class="elem__prop">letter-spacing: <b>-.02em</b></span>
+      </div>
+      <div class="esc__caixa">
+        <div class="d-h1">Control that<br>holds</div>
+      </div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">h2</div>
+        <span class="elem__prop">font-size: <b>--fs-h2</b></span>
+        <span class="elem__prop">font-weight: <b>300</b></span>
+        <span class="elem__prop">line-height: <b>1.05</b></span>
+        <span class="elem__prop">letter-spacing: <b>-.01em</b></span>
+      </div>
+      <div class="d-h2">Good control strategy beats more expensive instrumentation</div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">h3</div>
+        <span class="elem__prop">font-size: <b>--fs-h3</b></span>
+        <span class="elem__prop">font-weight: <b>400</b></span>
+        <span class="elem__prop">line-height: <b>1.08</b></span>
+        <span class="elem__prop">letter-spacing: <b>-.01em</b></span>
+      </div>
+      <div class="d-h3">Water &amp; wastewater treatment</div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">.eyebrow</div>
+        <span class="elem__prop">font-size: <b>--fs-eyebrow</b></span>
+        <span class="elem__prop">font-weight: <b>500</b></span>
+        <span class="elem__prop">letter-spacing: <b>.01em</b></span>
+        <span class="elem__prop">color: <b>--txt-2</b></span>
+      </div>
+      <div class="d-eyebrow">Past performance</div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">.lead</div>
+        <span class="elem__prop">font-size: <b>--fs-lead</b></span>
+        <span class="elem__prop">font-weight: <b>400</b></span>
+        <span class="elem__prop">line-height: <b>1.36</b></span>
+        <span class="elem__prop">max-width: <b>46ch</b></span>
+      </div>
+      <div class="d-lead">
+        We build, program and commission the control systems that run oil &amp; gas facilities,
+        treatment plants and solar sites across the United States.
+      </div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">body / .corpo</div>
+        <span class="elem__prop">font-size: <b>--fs-body</b></span>
+        <span class="elem__prop">font-weight: <b>400</b></span>
+        <span class="elem__prop">line-height: <b>1.45</b></span>
+        <span class="elem__prop">max-width: <b>62ch</b></span>
+      </div>
+      <div class="d-corpo">
+        Since 2000 we have delivered 279+ projects worldwide, 158+ across the United States and
+        78+ in Florida. Our teams work daily on Rockwell, Siemens and Schneider platforms, and we
+        maintain PI System deployments carrying more than 150,000 historized tags.
+      </div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">.numeros__item</div>
+        <span class="elem__prop">dt font-size: <b>clamp(2.25rem, 3.4vw, 3.5rem)</b></span>
+        <span class="elem__prop">dt font-weight: <b>300</b></span>
+        <span class="elem__prop">dt line-height: <b>1</b></span>
+        <span class="elem__prop">dt letter-spacing: <b>-.02em</b></span>
+        <span class="elem__prop">dt <b>tabular-nums</b></span>
+        <span class="elem__prop">dd font-size: <b>--fs-small</b> · max-width <b>22ch</b></span>
+      </div>
+      <div class="d-num">
+        <div class="d-num__dt">150,000+</div>
+        <div class="d-num__dd">Historized tags maintained across PI System deployments</div>
+      </div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">.card__titulo</div>
+        <span class="elem__prop">font-size: <b>1.25rem</b></span>
+        <span class="elem__prop">font-weight: <b>500</b></span>
+        <span class="elem__prop">line-height: <b>1.2</b></span>
+        <span class="elem__prop">letter-spacing: <b>-.01em</b></span>
+      </div>
+      <div class="d-card">
+        <div class="d-card__t">Control panel design &amp; build</div>
+        <p class="d-card__p">UL-compliant panels, from schematic to factory acceptance test.</p>
+      </div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">.botao / .cta / nav a</div>
+        <span class="elem__prop">font-size: <b>--fs-ui</b></span>
+        <span class="elem__prop">font-weight: <b>500</b></span>
+        <span class="elem__prop">min-height: <b>48px</b> · padding <b>0 24px</b></span>
+        <span class="elem__prop">border-radius: <b>0</b> — sempre</span>
+      </div>
+      <div>
+        <a class="d-ui" href="#topo">Request a quote</a>
+      </div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">.dado (monoespaçada)</div>
+        <span class="elem__prop">font-family: <b>--mono</b></span>
+        <span class="elem__prop">font-size: <b>13px</b> · letter-spacing <b>.02em</b></span>
+        <span class="elem__prop">destaque: <b>1.5rem</b> · letter-spacing <b>.12em</b></span>
+      </div>
+      <div>
+        <div class="d-mono-g">XUZ4WKEZLS67</div>
+        <div class="d-mono" style="margin-top: 12px;">UEI XUZ4WKEZLS67 · CAGE 9ZJM6 · NAICS 541511</div>
+      </div>
+    </div>
+
+    <div class="elem">
+      <div class="elem__meta">
+        <div class="elem__seletor">.rodape / legal</div>
+        <span class="elem__prop">font-size: <b>--fs-legal</b></span>
+        <span class="elem__prop">font-weight: <b>500</b></span>
+        <span class="elem__prop">letter-spacing: <b>.01em</b></span>
+      </div>
+      <div class="d-legal">© 2026 i3 Automations &amp; Controls · Privacy Policy · Terms and Conditions</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="secao">
+  <div class="env">
+    <div class="secao__cab">
+      <div class="secao__esq">
+        <span class="secao__ref">design.md §2.3</span>
+        <h2 class="secao__titulo">Por que o tracking negativo</h2>
+      </div>
+      <div class="secao__dir">
+        <p class="secao__nota">
+          O mesmo texto, no mesmo tamanho. À esquerda, com o que o navegador entrega por padrão
+          (peso 400, entrelinha 1.4, tracking normal). À direita, com os valores do sistema. Em tipo
+          grande, o espaço entre letras cresce junto com o corpo — o <code>-.01em</code> devolve a
+          densidade, e o peso 300 tira o excesso de tinta.
+        </p>
+      </div>
+    </div>
+
+    <div class="par">
+      <div class="par__col">
+        <div class="par__rot">padrão do navegador</div>
+        <div class="cru">Good control strategy beats more expensive instrumentation</div>
+      </div>
+      <div class="par__col">
+        <div class="par__rot par__rot--bom">sistema · 300 / 1.05 / -.01em</div>
+        <div class="sist">Good control strategy beats more expensive instrumentation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="secao secao--fundo">
+  <div class="env">
+    <div class="secao__cab">
+      <div class="secao__esq">
+        <span class="secao__ref">design.md §2.4</span>
+        <h2 class="secao__titulo">Medida e contenção</h2>
+      </div>
+      <div class="secao__dir">
+        <p class="secao__nota">
+          Largura de linha é regra de tipografia, não de layout — por isso vive em <code>ch</code>,
+          que acompanha o tamanho do tipo, e não em pixel. Quatro medidas, cada uma com um papel.
+        </p>
+      </div>
+    </div>
+
+    <div class="medidas">
+      <div class="medida">
+        <div class="medida__rot">46ch · .lead e .cabecalho__lead</div>
+        <div class="medida__caixa">
+          <p class="m-46">
+            We build, program and commission the control systems that run oil &amp; gas facilities,
+            treatment plants and solar sites across the United States.
+          </p>
+        </div>
+      </div>
+
+      <div class="medida">
+        <div class="medida__rot">62ch · .corpo</div>
+        <div class="medida__caixa">
+          <p class="m-62">
+            Since 2000 we have delivered 279+ projects worldwide, 158+ across the United States and
+            78+ in Florida. Our teams work daily on Rockwell, Siemens and Schneider platforms, and
+            we maintain PI System deployments carrying more than 150,000 historized tags. Good
+            control strategy beats more expensive instrumentation.
+          </p>
+        </div>
+      </div>
+
+      <div class="medida">
+        <div class="medida__rot">18ch · h1 de página interna</div>
+        <div class="medida__caixa">
+          <p class="m-18">Water and wastewater treatment</p>
+        </div>
+      </div>
+
+      <div class="medida">
+        <div class="medida__rot">22ch · rótulo de número (dd)</div>
+        <div class="medida__caixa">
+          <p class="m-22">Historized tags maintained across PI System deployments</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: var(--s-7);">
+      <pre>p           { hyphens: auto; -webkit-hyphens: auto; text-wrap: pretty; }
+h1,h2,h3,h4 { hyphens: none;  text-wrap: balance; }
+.tabular    { font-variant-numeric: tabular-nums; }</pre>
+      <p class="secao__nota" style="margin-top: var(--s-4);">
+        <code>text-wrap: balance</code> nos títulos é o que mais aparece em EN-US: ele impede a
+        última linha órfã de uma palavra só. O <code>hyphens: auto</code> veio do PT-BR e quase
+        nunca dispara em inglês — fica porque não custa nada e ainda pega termo técnico longo
+        (<em>instrumentation</em>, <em>commissioning</em>).
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="secao">
+  <div class="env">
+    <div class="secao__cab">
+      <div class="secao__esq">
+        <span class="secao__ref">design.md §2.5</span>
+        <h2 class="secao__titulo">Links em texto corrido</h2>
+      </div>
+      <div class="secao__dir">
+        <p class="secao__nota">
+          Sublinhado <strong>só</strong> em link dentro de parágrafo. Link de nav, de card e de CTA
+          nunca é sublinhado — cada um tem seu próprio sinal (a régua que cresce, o chip que desliza).
+        </p>
+      </div>
+    </div>
+
+    <p class="corrido">
+      Our capability statement lists every platform we are certified on, and the
+      <a href="#topo">full past performance record</a> is available on request. For federal
+      contracting, our <a href="#topo">UEI and CAGE registration</a> is current in SAM.gov.
+    </p>
+
+    <div style="margin-top: var(--s-6);">
+      <pre>p a, li a.link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color .18s ease;
+}
+p a:hover { color: var(--navy-hover); }</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="secao secao--fundo">
+  <div class="env">
+    <div class="secao__cab">
+      <div class="secao__esq">
+        <span class="secao__ref">CLAUDE.md · regra crítica 2</span>
+        <h2 class="secao__titulo">O que não se negocia</h2>
+      </div>
+      <div class="secao__dir">
+        <p class="secao__nota">
+          A tipografia é o único componente do projeto herdado <strong>exato</strong>, a pedido.
+          Nenhum valor desta página muda sem confirmação explícita.
+        </p>
+      </div>
+    </div>
+
+    <ol class="regras">
+      <li>
+        <span class="regras__n">1</span>
+        <span><b>Título grande = peso leve.</b> H1 e H2 em 300. Quanto maior o corpo, mais leve o traço.</span>
+      </li>
+      <li>
+        <span class="regras__n">2</span>
+        <span><b>Nada acima de peso 500, em lugar nenhum.</b> Inclusive <code>strong</code>. Acima disso o navegador sintetiza e o traço empasta.</span>
+      </li>
+      <li>
+        <span class="regras__n">3</span>
+        <span><b>Uma família só.</b> A monoespaçada de sistema é a única exceção, e só para dado técnico.</span>
+      </li>
+      <li>
+        <span class="regras__n">4</span>
+        <span><b>Nenhuma media query de tipo.</b> A escala inteira é <code>clamp()</code>. Se apareceu um <code>font-size</code> dentro de <code>@media</code>, está errado.</span>
+      </li>
+      <li>
+        <span class="regras__n">5</span>
+        <span><b>Fonte servida localmente.</b> Dois <code>.woff2</code> em <code>site/fonts/</code>, com <code>font-display: swap</code>. Nunca CDN.</span>
+      </li>
+      <li>
+        <span class="regras__n">6</span>
+        <span><b>Sem caixa alta em bloco.</b> Só em rótulo de até três palavras — o sistema não tem tracking positivo suficiente para caixa alta longa ser legível.</span>
+      </li>
+      <li>
+        <span class="regras__n">7</span>
+        <span><b>Medida em <code>ch</code>, não em pixel.</b> 46ch para lead, 62ch para corpo, 18ch para h1 interno, 22ch para rótulo de número.</span>
+      </li>
+      <li>
+        <span class="regras__n">8</span>
+        <span><b>Dígito em coluna pede <code>tabular-nums</code>.</b> Número de credibilidade, tabela, preço, data.</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<footer class="rodape">
+  <div class="env">
+    <p><strong>Fontes destes valores</strong> — nenhum foi medido no site renderizado.</p>
+    <ul class="rodape__lista">
+      <li><code>site/css/tokens.css</code> e <code>site/css/style.css</code> de github.com/kaeve1/UnidoCLP, em produção.</li>
+      <li>Consolidados em <code>specs/design.md</code> §2 deste repositório.</li>
+      <li>Conteúdo dos espécimes: copy real de i3automations.com, em EN-US.</li>
+      <li><strong>Nota de entrega:</strong> esta página carrega Outfit do Google Fonts porque os <code>.woff2</code> ainda não estão em <code>site/fonts/</code>. No site, a fonte é local — regra do projeto.</li>
+    </ul>
+  </div>
+</footer>
+
+<div class="barra">
+  <div class="barra__interno">
+    <span><span class="barra__rot">viewport</span> <b id="vw">—</b></span>
+    <span><span class="barra__rot">--fs-display</span> <b id="v-display">—</b></span>
+    <span><span class="barra__rot">--fs-h2</span> <b id="v-h2">—</b></span>
+    <span class="barra__opcional"><span class="barra__rot">--fs-lead</span> <b id="v-lead">—</b></span>
+    <span class="barra__opcional"><span class="barra__rot">--fs-body</span> <b id="v-body">—</b></span>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var linhas = Array.prototype.slice.call(document.querySelectorAll(".esc__linha"));
+  var barra = {
+    vw:      document.getElementById("vw"),
+    display: document.getElementById("v-display"),
+    h2:      document.getElementById("v-h2"),
+    lead:    document.getElementById("v-lead"),
+    body:    document.getElementById("v-body")
+  };
+
+  function px(el) {
+    return parseFloat(getComputedStyle(el).fontSize);
+  }
+
+  function fmt(n) {
+    return (Math.round(n * 10) / 10).toString().replace(/\.0$/, "") + "px";
+  }
+
+  function medir(classe) {
+    var el = document.querySelector(".esc__amostra--" + classe);
+    return el ? fmt(px(el)) : "—";
+  }
+
+  function atualizar() {
+    linhas.forEach(function (linha) {
+      var amostra = linha.querySelector(".esc__amostra");
+      var saida = linha.querySelector(".esc__agora");
+      if (amostra && saida) saida.textContent = fmt(px(amostra));
+    });
+
+    barra.vw.textContent = Math.round(window.innerWidth) + "px";
+    barra.display.textContent = medir("display");
+    barra.h2.textContent = medir("h2");
+    barra.lead.textContent = medir("lead");
+    barra.body.textContent = medir("body");
+  }
+
+  var agendado = false;
+  function agendar() {
+    if (agendado) return;
+    agendado = true;
+    requestAnimationFrame(function () {
+      agendado = false;
+      atualizar();
+    });
+  }
+
+  window.addEventListener("resize", agendar);
+  atualizar();
+
+  // A fonte variável muda a métrica ao trocar o fallback pelo Outfit real.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(atualizar);
+})();
+</script>

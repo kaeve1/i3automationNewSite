@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "site/css/style.css"
+        ],
+        "createdAt": "2026-08-19T02:53:06.250Z",
+        "reason": "Excecao sancionada pela propria regra (superficie de blueprint/canvas). O brief pinou o mundo de desenho tecnico ('desenho/planta(automacao)'); a grade de .heroi::before e o papel milimetrado que a lente de revelacao abre por cima, e .planta__grade cobre o canvas WebGL da planta isometrica. Ambas sao superficie de medicao, nao ornamento: a do heroi ainda leva mask radial para nao ladrilhar a dobra inteira."
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "site/css/style.css"
+        ],
+        "createdAt": "2026-08-19T21:58:37.344Z",
+        "reason": "Lente do ponteiro do heroi: background-clip:text e o MECANISMO do efeito (radial-gradient movido por --lente-x/y no pointermove), nao enfeite. Vive dentro de @supports + @media(hover) e o repouso e cor solida. Documentado em memoria.md 2026-08-19 (lente no texto) e espelha o uRaio 0.30 do shader em js/braco.js."
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "site/css/style.css"
+        ],
+        "createdAt": "2026-08-19T22:25:10.422Z",
+        "reason": "Hover de .capacidade: animar padding-block e a CORRECAO de um bug de usabilidade reportado pelo usuario, nao enfeite. A versao com :has() encolhia as irmas, o alvo saia de baixo do ponteiro e o hover piscava em laco. Crescer padding-block nao move a borda de cima da propria caixa, entao e estavel nos dois sentidos. As duas alternativas do hook nao servem: transform:scale move as irmas (reintroduz o bug) e borra o texto; grid-template-rows nao se aplica a padding de item de grade. Custo irrelevante em lista de 8 itens. Documentado no proprio CSS e em memoria.md 2026-08-19 (capabilities)."
+      }
+    ]
+  }
+}

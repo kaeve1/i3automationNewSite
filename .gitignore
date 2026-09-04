@@ -1,0 +1,69 @@
+# Vídeos e mídia
+Videos/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+
+# Arquivos de ambiente e sensíveis
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+credentials.json
+secrets.json
+config.local.js
+*.password
+
+# Node modules e dependências
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# IDE e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Builds e dist
+dist/
+build/
+.next/
+.nuxt/
+coverage/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+
+# Dependências do Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Cache
+.cache/
+*.cache
+
+# Subrepositórios (remover duplicação)
+# Não queremos o .git do I3AutomationSite

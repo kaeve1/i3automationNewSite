@@ -1,0 +1,261 @@
+/* ============================================================
+   5. INTRO — o braço vira desenho e voa até o lugar dele no herói
+   Estrutura herdada do UnidoCLP (FLIP: mede o destino, anima só transform).
+   O que é novo aqui: durante o voo a FOTO some e o TRAÇO aparece, então a
+   peça chega ao herói já como desenho — e o herói devolve a foto embaixo.
+   ============================================================ */
+.intro { display: none; }
+
+html.intro-ativa .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  /* O CAMPO É O DO HERÓI, e não o do rodapé. Estava em `--sup-3-fundo`
+     (#000814), que é a cor mais funda do site -- a do fecho. A marca voava
+     sobre quase-preto e pousava sobre `--sup-3` (#001D3D), então o véu sumia
+     revelando um navy diferente do que estava atrás dela um quadro antes.
+     Com o mesmo token, a saída da intro deixa de ter troca de cor: o que
+     desaparece é só o véu, não o chão. */
+  background: var(--sup-3);
+  animation: intro-seguranca 0s linear 8s forwards;
+}
+@keyframes intro-seguranca {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+.intro__cena { display: grid; justify-items: center; gap: clamp(22px, 3.4vh, 46px); }
+
+/* A PEÇA DA INTRO É O LOCKUP COMPLETO — marca mais wordmark, 3,530:1.
+   É aqui que ele cabe: `design.md` §3.3 mede que abaixo de 48px de altura
+   cada linha do wordmark fica em 8,8–11px e vira borrão, então o nav usa a
+   marca isolada. A intro tem a tela inteira, então usa a peça inteira. */
+.intro__peca {
+  position: relative;
+  width: min(72vw, 560px);
+  will-change: transform, clip-path;
+}
+.intro__marca { display: block; width: 100%; height: auto; }
+
+/* ============================================================
+   A INTRO SE DESENHA — reescrita em 2026-08-25 (design.md §3.5)
+   ============================================================
+   A versão anterior encaixava a marca GLIFO A GLIFO: um contorno em
+   `stroke-dasharray` sobre as formas cheias, três `<path>` normalizados por
+   `pathLength`, e no fim um voo com FLIP até um destino declarado no HTML
+   (`data-intro-destino`, `data-encaixe`). Era engenhoso e era caro, e tinha
+   um defeito que nenhuma quantidade de ajuste resolvia: **desenhava o
+   REDESENHO da marca**, não a marca. Traçar o contorno de um "3" de lados
+   retos é animar o erro com capricho.
+
+   Com a arte real — que é PNG facetado, e não vetor de três caminhos — não há
+   contorno para traçar. E não faz falta: o gesto que um LOCKUP pede é o de
+   ser LIDO, e um lockup se lê da esquerda para a direita, marca primeiro,
+   wordmark depois. É exatamente o que um `clip-path` horizontal faz.
+
+   O VOO TAMBÉM SAIU, e não por simplificação. Ele pousava a marca sobre uma
+   cópia dela no herói; o herói virou vídeo full-bleed sem logo dentro
+   (`plano.md` §3.4: sem CTA grande, sem objeto 3D, sem legenda), então não há
+   mais onde pousar. Voar até a marca do nav seria pior que não voar: o nav
+   carrega a marca ISOLADA, e o lockup chegaria numa forma que não é a dele.
+
+   Linha do tempo, dentro dos 5,6 s:
+     0    -> 1,0s   o lockup é revelado da esquerda para a direita
+     1,0s -> 2,6s   a frase se escreve com o cursor
+     4,0s -> 5,6s   o véu levanta (WAAPI, em main.js §5)
+
+   `backwards` em todas: sem ele o estado base aparece durante o atraso, que é
+   a pegadinha mais cara do sistema (design.md §7, regra 2). */
+html.intro-ativa .intro__peca {
+  animation: intro-revela 1s var(--curva) backwards;
+}
+@keyframes intro-revela {
+  from {
+    /* Começa fechado à esquerda e com um fio de escala a menos: a peça não
+       "aparece", ela é DESCOBERTA, e o assentamento de 1,02 para 1 é o que
+       faz o fim do gesto ter um repouso em vez de um corte. */
+    clip-path: inset(0 100% 0 0);
+    transform: scale(1.02);
+    opacity: .001;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.intro__frase {
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: clamp(1rem, 1.9vw, 1.625rem);
+  font-weight: 300;
+  letter-spacing: .005em;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, .94);
+  white-space: nowrap;
+  max-width: 92vw;
+}
+html.intro-ativa .intro__texto {
+  display: inline-block;
+  clip-path: inset(0 100% 0 0);
+  animation: intro-escrita 4s steps(46) forwards;
+}
+html.intro-ativa .intro__cursor {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 2px;
+  height: 1.15em;
+  margin-top: -.575em;
+  background: var(--azul-luz);
+  animation: intro-cursor 4s steps(46) forwards;
+}
+@keyframes intro-escrita {
+  0%   { clip-path: inset(0 100% 0 0); }
+  25%  { clip-path: inset(0 0 0 0); }
+  75%  { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 100% 0 0); }
+}
+@keyframes intro-cursor {
+  0%   { transform: translateX(0); opacity: 1; }
+  25%  { transform: translateX(var(--largura-frase, 0px)); opacity: 1; }
+  75%  { transform: translateX(var(--largura-frase, 0px)); opacity: 1; }
+  100% { transform: translateX(0); opacity: 0; }
+}
+
+/* --- A FRASE DA INTRO EM DUAS LINHAS, no celular -------------------------
+   `.intro__frase` é `white-space: nowrap` porque a máquina de escrever exige
+   uma linha só: o efeito é `clip-path: inset(0 100% 0 0)` abrindo da esquerda
+   para a direita, e o cursor caminha por `translateX(--largura-frase)`. Os
+   dois pressupõem que texto e percurso do cursor são a MESMA reta.
+
+   Medido no Chrome: a frase inteira mede 391px em qualquer aparelho, porque
+   `font-size: clamp(1rem, 1.9vw, 1.625rem)` trava no piso de 16px assim que
+   1,9vw cai abaixo dele — ou seja em tudo abaixo de 842px de janela. O teto
+   de largura é `92vw`, que dá 294px num aparelho de 320 e 345px num de 375.
+   391 não cabe em 345, então a frase VAZAVA para fora da tela em todo
+   celular, cortada no meio de "instrumentation".
+
+   O ponto de quebra sai da conta: 391 / 0,92 = 425px de janela. Abaixo disso
+   nunca coube. O corte fica em 440 para dar folga a quem cair na fonte de
+   reserva, que é mais larga que Outfit.
+
+   POR QUE DUAS LINHAS E NÃO TIPO MENOR. Para caber numa linha só a 320px o
+   corpo teria de cair para ~12px (16 x 294/391) — e valor de tipo é intocável
+   sem confirmação (CLAUDE.md nº2). Duas linhas a 16px leem melhor que uma a
+   12, e não tocam na escala.
+
+   O gesto continua sendo o mesmo, e é isto que importa: a máquina de escrever
+   não virou "varredura". Cada linha tem `clip-path` próprio, e as duas correm
+   em sequência — a segunda só começa quando a primeira termina. O apagar
+   inverte a ordem, como um backspace de verdade: a linha de baixo some
+   primeiro. O cursor acompanha, e o salto de fim-da-linha-1 para
+   começo-da-linha-2 é instantâneo porque os dois quadros ficam a 0,001% de
+   distância — sem isso ele deslizaria na diagonal pelo meio da frase.
+
+   AS TRÊS ANIMAÇÕES USAM O MESMO `steps(26)`, e isso não é preguiça: o
+   `clip-path` revela FATIAS da caixa, não caracteres, e o cursor caminha em
+   fatias da largura da linha. Enquanto os três contarem a mesma quantidade
+   de fatias, o cursor fica colado na borda do texto; conte diferente e ele
+   descola no meio do caminho. A frase inteira já era assim — 46 passos para
+   53 caracteres — então a fidelidade aqui é a mesma que o desktop sempre
+   teve. */
+@media (max-width: 440px) {
+  .intro__frase { white-space: normal; max-width: 92vw; }
+  /* `width: max-content` NÃO É ACABAMENTO — é o que faz o efeito existir.
+     Bloco sem largura própria ocupa a linha inteira (230px, a largura da linha
+     mais longa), e aí duas coisas quebram de uma vez: `getBoundingClientRect`
+     devolve 230 para as DUAS linhas, então o cursor da primeira caminharia
+     72px além da última letra; e o `clip-path`, que é fatia da CAIXA, abriria
+     230px de véu sobre 158px de texto — a linha terminaria de ser escrita a
+     69% do tempo dela e o resto seria véu correndo no vazio.
+
+     Com `max-content` a caixa passa a ser a letra, e as três medidas voltam a
+     falar da mesma coisa. */
+  .intro__linha { display: block; width: max-content; white-space: nowrap; }
+
+  /* Quem anima agora são as LINHAS; o invólucro só as empilha. */
+  html.intro-ativa .intro__texto {
+    display: block;
+    clip-path: none;
+    animation: none;
+  }
+  html.intro-ativa .intro__linha { clip-path: inset(0 100% 0 0); }
+  html.intro-ativa .intro__linha:first-child {
+    animation: intro-escrita-l1 4s steps(26) forwards;
+  }
+  html.intro-ativa .intro__linha:last-child {
+    animation: intro-escrita-l2 4s steps(26) forwards;
+  }
+
+  /* O cursor deixa de ser centrado no bloco inteiro e passa a morar na linha:
+     `1.3em` é a entrelinha declarada em `.intro__frase`, então `--dl` é
+     exatamente um passo de linha. */
+  html.intro-ativa .intro__cursor {
+    top: 0;
+    margin-top: .075em;
+    --dl: 1.3em;
+    animation: intro-cursor-2l 4s steps(26) forwards;
+  }
+}
+
+@keyframes intro-escrita-l1 {
+  0%     { clip-path: inset(0 100% 0 0); }
+  12.5%  { clip-path: inset(0 0 0 0); }
+  87.5%  { clip-path: inset(0 0 0 0); }
+  100%   { clip-path: inset(0 100% 0 0); }
+}
+@keyframes intro-escrita-l2 {
+  0%     { clip-path: inset(0 100% 0 0); }
+  12.5%  { clip-path: inset(0 100% 0 0); }
+  25%    { clip-path: inset(0 0 0 0); }
+  75%    { clip-path: inset(0 0 0 0); }
+  87.5%  { clip-path: inset(0 100% 0 0); }
+  100%   { clip-path: inset(0 100% 0 0); }
+}
+/* `--l1` e `--l2` são as larguras reais das duas linhas, medidas em main.js —
+   a mesma medida que `--largura-frase` já fazia para uma linha só. */
+@keyframes intro-cursor-2l {
+  0%       { transform: translate(0, 0); opacity: 1; }
+  12.5%    { transform: translate(var(--l1, 0px), 0); opacity: 1; }
+  12.501%  { transform: translate(0, var(--dl)); opacity: 1; }
+  25%      { transform: translate(var(--l2, 0px), var(--dl)); opacity: 1; }
+  75%      { transform: translate(var(--l2, 0px), var(--dl)); opacity: 1; }
+  87.5%    { transform: translate(0, var(--dl)); opacity: 1; }
+  87.501%  { transform: translate(var(--l1, 0px), 0); opacity: 1; }
+  100%     { transform: translate(0, 0); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.intro-ativa .intro__peca { animation: none; }
+  html.intro-ativa .intro__texto { animation: none; clip-path: none; }
+  /* AS LINHAS PRECISAM DESTA REGRA, e sem ela a frase somia no celular: abaixo
+     de 440px quem carrega o `clip-path: inset(0 100% 0 0)` é `.intro__linha`,
+     não mais o `.intro__texto`. Desligar só a animação deixaria as duas linhas
+     paradas no estado inicial, que é o estado INVISÍVEL — a intro fecharia em
+     0,8s tendo mostrado uma frase em branco. É a mesma armadilha registrada em
+     20/08 para a marca, e ela reaparece toda vez que um estado inicial de
+     animação esconde conteúdo. */
+  html.intro-ativa .intro__linha { animation: none; clip-path: none; }
+  html.intro-ativa .intro__cursor { display: none; }
+
+  /* A MARCA TEM DE APARECER PRONTA, e isto é conserto de 20/08 que sobrevive
+     à reescrita da intro. O estado inicial de `intro-revela` é
+     `clip-path: inset(0 100% 0 0)` — ou seja, INVISÍVEL. Desligar só a
+     animação deixaria o lockup no estado base e quem pede movimento reduzido
+     veria um retângulo vazio por 0,8 s. `animation: none` mais `clip-path:
+     none` devolve a peça pronta e parada, que é o que a regra dura nº3 do
+     design.md pede: o que carrega significado aparece, só não viaja.
+
+     É a MESMA armadilha da frase, logo acima, e ela reaparece toda vez que um
+     estado inicial de animação esconde conteúdo. */
+  html.intro-ativa .intro__peca { clip-path: none; opacity: 1; transform: none; }
+
+  html.intro-ativa .intro { animation: intro-seguranca 0s linear .8s forwards; }
+}
+
+/* ============================================================

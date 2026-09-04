@@ -1,0 +1,20 @@
+# Skills instaladas pelo ui-ux-pro-max-cli (uipro init).
+# Conteudo CC-BY-NC-4.0 de terceiro; este e trabalho comercial pago.
+# Referencia de decisao, nao entregavel — nao versionar.
+.claude/skills/banner-design/
+.claude/skills/brand/
+.claude/skills/design/
+.claude/skills/design-system/
+.claude/skills/slides/
+.claude/skills/ui-styling/
+.claude/skills/ui-ux-pro-max/
+
+# Cache de build
+.wrangler/
+.impeccable/hook.cache.json
+__pycache__/
+*.pyc
+
+# Estado de build: o que o ultimo `build_ativos.py` escreveu em site/.
+# Serve para `conferir_mao()` detectar edicao a mao no que e gerado.
+ferramentas/_publicado.json

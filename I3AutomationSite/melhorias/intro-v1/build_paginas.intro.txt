@@ -1,0 +1,24 @@
+    intro_html = ''
+    intro_script = ''
+    if intro:
+        intro_script = ('\n<script>\n'
+                        '/* Marcado antes da primeira pintura: sem isto a peca do heroi\n'
+                        '   nasceria visivel e piscaria duas vezes. */\n'
+                        'document.documentElement.className += " intro-ativa";\n'
+                        '</script>')
+        # A intro passa a ser a MARCA, nao o braco. O par foto->traco do braco
+        # nunca fechava com a peca do heroi: a garra do desenho e a garra em 3D
+        # sao a mesma maquina em poses diferentes, e o encontro ficava torto.
+        # O logo nao tem esse problema -- ele pousa exatamente sobre si mesmo.
+        intro_html = '''
+<div class="intro" role="presentation">
+  <div class="intro__cena">
+    <div class="intro__peca">
+      %s
+    </div>
+    <p class="intro__frase">
+      <span class="intro__texto"><span class="intro__linha">Good control strategy</span> <span class="intro__linha">beats expensive instrumentation</span></span><span class="intro__cursor" aria-hidden="true"></span>
+    </p>
+  </div>
+</div>
+''' % marca_lockup('intro__marca', knockout=True)
