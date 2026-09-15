@@ -58,25 +58,3 @@ Tem um passo de build opcional em `scripts/build.py`, que valida o HTML (ids
 duplicados, links quebrados, imagens sem `alt`) e separa só os arquivos públicos
 para deploy.
 
----
-
-## Rodando localmente
-
-Qualquer servidor estático serve. Com Python:
-
-```bash
-# versão clássica
-cd I3AutomationSite/site && python -m http.server 8801
-
-# versão NueyStyle
-cd NueyStyle && python -m http.server 8802
-```
-
-No NueyStyle também dá para usar `npm run dev` (atalho para o mesmo
-`http.server`) e `npm run build` para gerar `dist/`.
-
-## O que não está no repositório
-
-Os vídeos (`*.mp4`), a pasta `dist/` e o tarball de build estão no `.gitignore` —
-são grandes demais para o limite de 100 MB por arquivo do GitHub. Os sites
-funcionam sem eles, mas os heros em vídeo ficam com o poster estático.
