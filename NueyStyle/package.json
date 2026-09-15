@@ -1,0 +1,9 @@
+{
+  "name": "i3-automations-definitive",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "python scripts/build.py",
+    "dev": "python -m http.server 4173 --bind 127.0.0.1"
+  }
+}

@@ -1,0 +1,18 @@
+/who-we-are/             /who-we-are                301
+/capabilities/           /capabilities              301
+/past-performance/       /past-performance          301
+/services/               /services                  301
+/gallery/                /gallery                   301
+/contact-us/             /contact                   301
+/privacy-policy/         /privacy-policy            301
+/terms-and-conditions/   /terms-and-conditions      301
+/home/                   /                          301
+
+/.htaccess               /404.html                  404
+
+/feed/*                  /404.html                  404
+/comments/feed/*         /404.html                  404
+/wp-json/*               /404.html                  404
+/xmlrpc.php*             /404.html                  404
+/wp-login.php*           /404.html                  404
+/wp-admin/*              /404.html                  404

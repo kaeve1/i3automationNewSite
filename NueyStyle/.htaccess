@@ -1,0 +1,86 @@
+Options -Indexes
+DirectoryIndex index.html
+
+<FilesMatch "^(_headers|_redirects)$">
+  Require all denied
+</FilesMatch>
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  RewriteRule ^index\.html$ / [R=301,L]
+
+  RewriteRule ^who-we-are/?$ /who-we-are.html [R=301,L]
+  RewriteRule ^capabilities/?$ /capabilities.html [R=301,L]
+  RewriteRule ^past-performance/?$ /past-performance.html [R=301,L]
+  RewriteRule ^services/?$ /services.html [R=301,L]
+  RewriteRule ^gallery/?$ /gallery.html [R=301,L]
+  RewriteRule ^contact-us/?$ /contact.html [R=301,L]
+  RewriteRule ^privacy-policy/?$ /privacy-policy.html [R=301,L]
+  RewriteRule ^terms-and-conditions/?$ /terms-and-conditions.html [R=301,L]
+  RewriteRule ^home/?$ / [R=301,L]
+
+  RewriteRule ^feed - [G,L]
+  RewriteRule ^comments/feed - [G,L]
+  RewriteRule ^wp-json - [G,L]
+  RewriteRule ^xmlrpc\.php - [G,L]
+  RewriteRule ^wp-login\.php - [G,L]
+  RewriteRule ^wp-admin - [G,L]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain
+  AddOutputFilterByType DEFLATE text/javascript application/javascript
+  AddOutputFilterByType DEFLATE application/json application/manifest+json
+  AddOutputFilterByType DEFLATE application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/avif .avif
+  AddType image/webp .webp
+  AddType application/manifest+json .webmanifest
+  AddType font/woff2 .woff2
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg       "access plus 31536000 seconds"
+  ExpiresByType image/png        "access plus 31536000 seconds"
+  ExpiresByType image/webp       "access plus 31536000 seconds"
+  ExpiresByType image/avif       "access plus 31536000 seconds"
+  ExpiresByType font/woff2       "access plus 31536000 seconds"
+  ExpiresByType image/svg+xml    "access plus 604800 seconds"
+  ExpiresByType text/css         "access plus 3600 seconds"
+  ExpiresByType text/javascript  "access plus 3600 seconds"
+  ExpiresByType image/x-icon     "access plus 604800 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "\.(jpe?g|png|webp|avif)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(svg)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  <FilesMatch "\.(css)$">
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+  <FilesMatch "\.(js)$">
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+  <FilesMatch "^(favicon\.ico|site\.webmanifest)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>

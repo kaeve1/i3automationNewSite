@@ -1,0 +1,216 @@
+/* i3Automations - NueyStyle
+   Design tokens: rounded surfaces, banded themes, motion curves. */
+
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url("../fonts/outfit-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url("../fonts/outfit-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root{
+  /* Brand ---------------------------------------------------------------- */
+  --ink:#062440;
+  --ink-soft:#0D4477;
+  --navy:#003566;
+  --navy-deep:#002545;
+  --cyan:#4D8ECB;
+  --cyan-light:#88B4DD;
+  --amber:#FDC500;
+  --red:#C4342A;
+
+  --paper:#FFFFFF;
+  --canvas:#F2F5F8;
+  --line:#DFE7EE;
+
+  --text:#1A1A1A;
+  --text-muted:#5A6B7C;
+  --text-invert:#FFFFFF;
+  --text-invert-muted:#9FB6CC;
+
+  --brand-gradient:linear-gradient(160deg,#003566 0%,#0D4477 45%,#4D8ECB 100%);
+
+  /* Frosted glass -------------------------------------------------------- */
+  --frost:blur(28px);
+  --frost-tint:rgba(255,255,255,.70);
+  --frost-edge:rgba(255,255,255,.58);
+  --frost-solid:#FFFFFF;
+  --frost-fg:#062440;
+
+  /* Type ----------------------------------------------------------------- */
+  --font-display:"Outfit",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-body:"Outfit",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --fs-display:clamp(2.5rem,1.2rem + 5.4vw,4.75rem);
+  --fs-h1:clamp(2.125rem,1.2rem + 3.9vw,3.5rem);
+  --fs-h2:clamp(1.75rem,1.28rem + 2vw,2.5rem);
+  --fs-h3:clamp(1.375rem,1.16rem + .9vw,1.75rem);
+  --fs-h4:clamp(1.125rem,1.06rem + .27vw,1.25rem);
+  --fs-lead:clamp(1rem,.95rem + .22vw,1.125rem);
+  --fs-body:clamp(.9375rem,.92rem + .1vw,1rem);
+  --fs-small:clamp(.8125rem,.79rem + .1vw,.875rem);
+  --fs-eyebrow:.75rem;
+  --fs-metric:clamp(2.75rem,1.6rem + 4.8vw,4rem);
+
+  --lh-display:1.04;
+  --lh-h1:1.08;
+  --lh-h2:1.12;
+  --lh-h3:1.22;
+  --lh-h4:1.32;
+  --lh-lead:1.55;
+  --lh-body:1.65;
+
+  --tr-display:-.035em;
+  --tr-h1:-.03em;
+  --tr-h2:-.026em;
+  --tr-h3:-.02em;
+  --tr-h4:-.01em;
+  --tr-lead:-.01em;
+  --tr-eyebrow:.10em;
+
+  /* Space ---------------------------------------------------------------- */
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:24px;
+  --space-6:32px;
+  --space-7:48px;
+  --space-8:64px;
+  --space-9:96px;
+  --space-10:128px;
+  --space-11:160px;
+
+  --container:1280px;
+  --gutter:20px;
+
+  --section-y:72px;
+  --section-y-sheet:88px;
+
+  /* Roundings ------------------------------------------------------------ */
+  --radius-xs:10px;
+  --radius-sm:18px;
+  --radius-md:26px;
+  --radius-lg:40px;
+  --radius-xl:56px;
+  --radius-full:999px;
+
+  --shadow-1:0 1px 2px rgba(6,36,64,.06),0 2px 8px rgba(6,36,64,.04);
+  --shadow-2:0 4px 12px rgba(6,36,64,.08),0 12px 32px rgba(6,36,64,.06);
+  --shadow-3:0 8px 24px rgba(6,36,64,.10),0 24px 64px rgba(6,36,64,.08);
+
+  /* Motion --------------------------------------------------------------- */
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ease-glide:cubic-bezier(.28,.11,.32,1);
+  --fast:180ms;
+  --base:320ms;
+  --slow:600ms;
+  --slower:900ms;
+
+  --scrim-image:linear-gradient(180deg,rgba(6,36,64,.15),rgba(6,36,64,.74));
+
+  color-scheme:light;
+}
+
+@media (min-width:768px){
+  :root{ --gutter:32px; }
+}
+
+@media (min-width:1024px){
+  :root{
+    --section-y:128px;
+    --section-y-sheet:160px;
+  }
+}
+
+/* Bands: every section declares the surface it sits on --------------------- */
+
+.b-white{
+  --surface:#FFFFFF;
+  --raised:#FFFFFF;
+  --sunken:#F2F5F8;
+  --on:#1A1A1A;
+  --on-muted:#5A6B7C;
+  --on-faint:#687683;
+  --hairline:#DFE7EE;
+  --hairline-strong:#C6D3DF;
+  --accent:#4D8ECB;
+  --accent-ink:#2C6396;
+  --btn-bg:#003566;
+  --btn-fg:#FFFFFF;
+  --btn-ic-bg:#FFFFFF;
+  --btn-ic-fg:#003566;
+  --card-bg:var(--sunken);
+  --card-elev:none;
+}
+
+.b-light{
+  --surface:#F2F5F8;
+  --raised:#FFFFFF;
+  --sunken:#E7EDF3;
+  --on:#1A1A1A;
+  --on-muted:#5A6B7C;
+  --on-faint:#687683;
+  --hairline:#DFE7EE;
+  --hairline-strong:#C6D3DF;
+  --accent:#4D8ECB;
+  --accent-ink:#2C6396;
+  --btn-bg:#003566;
+  --btn-fg:#FFFFFF;
+  --btn-ic-bg:#FFFFFF;
+  --btn-ic-fg:#003566;
+  --card-bg:var(--raised);
+  --card-elev:var(--shadow-1);
+}
+
+.b-dark{
+  --surface:#062440;
+  --raised:#0D3055;
+  --sunken:#041B31;
+  --on:#FFFFFF;
+  --on-muted:#9FB6CC;
+  --on-faint:#728BA1;
+  --hairline:rgba(159,182,204,.18);
+  --hairline-strong:rgba(159,182,204,.34);
+  --accent:#88B4DD;
+  --accent-ink:#88B4DD;
+  --btn-bg:#FFFFFF;
+  --btn-fg:#062440;
+  --btn-ic-bg:#003566;
+  --btn-ic-fg:#FFFFFF;
+  --card-bg:var(--raised);
+  --card-elev:none;
+
+  /* canvas pieces read these */
+  --mimico-traco:#88B4DD;
+  --mimico-vivo:#FDC500;
+  --mimico-tinta:#FFFFFF;
+  --malha-traco:#88B4DD;
+  --malha-pv:#FFFFFF;
+  --malha-sp:#88B4DD;
+  --carta-traco:#88B4DD;
+  --carta-vivo:#FDC500;
+  --carta-tinta:#FFFFFF;
+  --braco-traco:#88B4DD;
+  --braco-aceso:#4D8ECB;
+  --braco-linha-fina:0.9px;
+  --braco-linha-grossa:1.8px;
+  --braco-traco-baixo:#88B4DD;
+  --braco-aceso-baixo:#4D8ECB;
+  --braco-ganho-baixo:.95;
+}

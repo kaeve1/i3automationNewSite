@@ -1,0 +1,9 @@
+dist/
+*.tar.gz
+__pycache__/
+.env
+.env.*
+.review/
+
+# Client media drop, not deployed
+videosfotos/

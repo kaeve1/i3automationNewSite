@@ -73,3 +73,9 @@ ENV/
 
 # Subrepositórios (remover duplicação)
 # Não queremos o .git do I3AutomationSite
+
+# Tarball de build do NueyStyle
+*.tar.gz
+
+# Cloudflare Wrangler
+.wrangler/
